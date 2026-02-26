@@ -41,3 +41,21 @@ Create a login component:
 ```
 ng generate c component/login --skip-tests=true
 ```
+
+Add bootstrap in angular.json in "styles":
+```
+ "node_modules/bootstrap/dist/css/bootstrap.min.css",
+```
+
+Generate a service:
+```
+ng g service service/user --skip-tests=true
+```
+
+Generate an interface:
+```
+ng g interface interface/user
+```
+
+Handling request failure:
+https://angular.dev/guide/http/making-requests#handling-request-failure
