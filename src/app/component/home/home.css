@@ -1,0 +1,8 @@
+.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.progress-bar-background {
+    background-color: #C9C5C5; 
+}

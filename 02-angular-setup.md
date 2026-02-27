@@ -20,6 +20,10 @@ https://getbootstrap.com/
 npm i bootstrap
 ```
 
+Refer to Bootstrap 5 doc:
+https://getbootstrap.com/docs/5.0/getting-started/introduction/
+
+
 Install Angular CLI:
 https://angular.dev/installation
 ```
