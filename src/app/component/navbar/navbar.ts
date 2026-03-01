@@ -9,7 +9,7 @@ import { User } from '../../interface/user';
   styleUrl: './navbar.css',
 })
 export class Navbar {
-  @Input() user!: User;
+  @Input() user: User | undefined;
   
   logOut(): void {
 
