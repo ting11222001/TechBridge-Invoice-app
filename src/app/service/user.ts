@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, tap, throwError } from 'rxjs';
-import { CustomHttpResponse, Profile } from '../interface/appstates';
+import { CustomHttpResponse, ProfileState } from '../interface/appstates';
 
 @Injectable({
   providedIn: 'root',
@@ -10,23 +10,34 @@ export class User {
   private readonly server: string = 'http://localhost:8080';
   constructor(private http: HttpClient) {}
 
-  login$ = (email: string, password: string) => <Observable<CustomHttpResponse<Profile>>>
-    this.http.post<CustomHttpResponse<Profile>>
+  login$ (email: string, password: string) {
+    return this.http.post<CustomHttpResponse<ProfileState>>
       (`${this.server}/user/login`, { email, password }) // url same as the UserResource in the backend
       .pipe(
         tap(response => console.log(response)),
         catchError(this.handleError)
       );
+  }
 
-  verifyCode$ = (email: string, code: string) => <Observable<CustomHttpResponse<Profile>>>
-    this.http.get<CustomHttpResponse<Profile>>
+  verifyCode$ (email: string, code: string) {
+    return this.http.get<CustomHttpResponse<ProfileState>>
       (`${this.server}/user/verify/code/${email}/${code}`)
       .pipe(
         tap(response => console.log(response)),
         catchError(this.handleError)
+      );    
+  }
+    
+  profile$ () {
+    return this.http.get<CustomHttpResponse<ProfileState>>
+      (`${this.server}/user/profile`)
+      .pipe(
+        tap(response => console.log(response)),
+        catchError(this.handleError)
       );
+  }
 
-  private handleError(error: HttpErrorResponse): Observable<never> {
+  private handleError(error: HttpErrorResponse) {
     console.log(error);
     let errorMessage: string;
     if (error.status === 0) {

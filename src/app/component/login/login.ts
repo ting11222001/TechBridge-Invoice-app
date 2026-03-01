@@ -51,18 +51,22 @@ export class Login {
             this.router.navigate(['/']); // to the home page
             return { 
               dataState: DataState.LOADED,
-              loginSuccess: true };
+              loginSuccess: true 
+            };
           }
         }),
         startWith({ 
           dataState: DataState.LOADING, 
-          isUsingMfa: false }),
-        catchError((error: string) => 
-            of({ 
+          isUsingMfa: false 
+        }),
+        catchError((error: string) => {
+            return of({ 
               dataState: DataState.ERROR, 
               isUsingMfa: false, 
               loginSuccess: false, 
-              error })
+              error // thrown error message from the login$
+            });
+          }
         )
       )
   }
