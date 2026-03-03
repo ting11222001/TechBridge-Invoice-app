@@ -32,7 +32,8 @@ export class UserService {
     
   profile$ () {
     return this.http.get<CustomHttpResponse<ProfileState>>
-      (`${this.server}/user/profile`, { headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem(Key.TOKEN)}`)})
+      // (`${this.server}/user/profile`, { headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem(Key.TOKEN)}`)})
+      (`${this.server}/user/profile`)
       .pipe(
         tap(response => {
           console.log("profile$ response:");
@@ -44,11 +45,29 @@ export class UserService {
 
   updateProfile$ (user: User) {
     return this.http.patch<CustomHttpResponse<ProfileState>>
-      (`${this.server}/user/update`, user, { headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem(Key.TOKEN)}`)})
+      // (`${this.server}/user/update`, user, { headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem(Key.TOKEN)}`)})
+       (`${this.server}/user/update`, user)
       .pipe(
         tap(response => {
           console.log("updateProfile$ response:");
           console.log(response);
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  refreshToken$ () {
+    return this.http.get<CustomHttpResponse<ProfileState>>
+       (`${this.server}/user/refresh/token`, { headers: { Authorization: `Bearer ${localStorage.getItem(Key.REFRESH_TOKEN)}` }} )
+      .pipe(
+        tap(response => {
+          console.log("refreshToken$ response:");
+          console.log(response);
+
+          localStorage.removeItem(Key.TOKEN);
+          localStorage.removeItem(Key.REFRESH_TOKEN);
+          localStorage.setItem(Key.TOKEN, response.data ? response.data.access_token : '');
+          localStorage.setItem(Key.REFRESH_TOKEN, response.data ? response.data.refresh_token : '');
         }),
         catchError(this.handleError)
       );
