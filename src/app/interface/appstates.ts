@@ -12,8 +12,8 @@ export interface LoginState {
     phone?: string;
 }
 
-export interface CustomHttpResponse<T> { // Same as the HttpResponse class in the backend
-    timestamp: Date;
+export interface CustomHttpResponse<T> { // Same as the HttpResponse class in the backend. Note that @JsonInclude(NON_DEFAULT) means the null fields will be ignored when coming from the backend.
+    timestamp: Date; // this seems to be string in HttpResponse
     statusCode: number;
     status: string;
     message: string;

@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { CustomHttpResponse, ProfileState } from '../interface/appstates';
 import { Key } from '../enum/key.enum';
+import { User } from '../interface/user';
 
 @Injectable({
   providedIn: 'root',
 })
-export class User {
+export class UserService {
   private readonly server: string = 'http://localhost:8080';
   constructor(private http: HttpClient) {}
 
@@ -33,7 +34,22 @@ export class User {
     return this.http.get<CustomHttpResponse<ProfileState>>
       (`${this.server}/user/profile`, { headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem(Key.TOKEN)}`)})
       .pipe(
-        tap(response => console.log(response)),
+        tap(response => {
+          console.log("profile$ response:");
+          console.log(response);
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  updateProfile$ (user: User) {
+    return this.http.patch<CustomHttpResponse<ProfileState>>
+      (`${this.server}/user/update`, user, { headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem(Key.TOKEN)}`)})
+      .pipe(
+        tap(response => {
+          console.log("updateProfile$ response:");
+          console.log(response);
+        }),
         catchError(this.handleError)
       );
   }

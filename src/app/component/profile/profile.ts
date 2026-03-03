@@ -5,8 +5,7 @@ import { RouterModule } from '@angular/router';
 import { BehaviorSubject, catchError, map, Observable, of, startWith } from 'rxjs';
 import { CustomHttpResponse, ProfileState } from '../../interface/appstates';
 import { DataState } from '../../enum/datastate.enum';
-import { EventType } from '../../enum/event-type.enum';
-import { User } from '../../service/user';
+import { UserService } from '../../service/user';
 import { State } from '../../interface/state';
 import { Navbar } from '../navbar/navbar';
 
@@ -25,13 +24,16 @@ export class Profile {
   // isLoading$ = this.isLoadingSubject.asObservable();
   isLoading = signal<boolean>(true);
 
-  constructor(private userService: User) { }
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
     this.profileState$ = this.userService.profile$()
       .pipe(
         map(response => {
           this.dataSubject.next(response);
+          // console.log("getProfile this.dataSubject.value:");
+          // console.log(this.dataSubject.value);
+          this.isLoading.set(false);
           return { 
             dataState: DataState.LOADED, 
             appData: response 
@@ -41,6 +43,7 @@ export class Profile {
           dataState: DataState.LOADING 
         }),
         catchError((error: string) => {
+          this.isLoading.set(false);
           return of({ 
             dataState: DataState.ERROR, 
             appData: this.dataSubject.value,
@@ -51,7 +54,33 @@ export class Profile {
   }
 
   updateProfile(profileForm: NgForm): void {
- 
+    this.isLoading.set(true);
+    this.profileState$ = this.userService.updateProfile$(profileForm.value)
+    .pipe(
+      map(response => {
+        // this.dataSubject.next({ ...response, data: response.data });  // backend always returns the entire User object with the updated fields in UserResource.updateUser > UserService.updateUserDetails > UserRepositoryImpl.updateUserDetails
+        this.dataSubject.next(response);
+        // console.log("updateProfile this.dataSubject.value:");
+        // console.log(this.dataSubject.value);
+        this.isLoading.set(false);
+        return { 
+          dataState: DataState.LOADED, 
+          appData: this.dataSubject.value 
+        };
+      }),
+      startWith({ 
+        dataState: DataState.LOADED,
+        appData: this.dataSubject.value
+      }),
+      catchError((error: string) => {
+        this.isLoading.set(false);
+        return of({ 
+          dataState: DataState.ERROR, 
+          appData: this.dataSubject.value,
+          error 
+        })
+      })
+    )
   }
 
   updatePassword(passwordForm: NgForm): void {

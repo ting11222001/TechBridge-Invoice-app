@@ -3,7 +3,7 @@ import { BehaviorSubject, catchError, map, Observable, of, startWith } from 'rxj
 import { DataState } from '../../enum/datastate.enum';
 import { LoginState } from '../../interface/appstates';
 import { Router, RouterModule } from '@angular/router';
-import { User } from '../../service/user';
+import { UserService } from '../../service/user';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Key } from '../../enum/key.enum';
 import { CommonModule } from '@angular/common';
@@ -22,7 +22,7 @@ export class Login {
 
   readonly DataState = DataState;
   
-  constructor(private router: Router, private userService: User) {}
+  constructor(private router: Router, private userService: UserService) {}
 
   login(loginForm: NgForm): void {
     const { email, password } = loginForm.value;
