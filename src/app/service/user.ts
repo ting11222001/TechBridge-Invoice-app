@@ -4,12 +4,15 @@ import { catchError, Observable, tap, throwError } from 'rxjs';
 import { CustomHttpResponse, ProfileState } from '../interface/appstates';
 import { Key } from '../enum/key.enum';
 import { User } from '../interface/user';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private readonly server: string = 'http://localhost:8080';
+  private jwtHelper = new JwtHelperService();
+
   constructor(private http: HttpClient) {}
 
   login$ (email: string, password: string) {
@@ -72,6 +75,10 @@ export class UserService {
         catchError(this.handleError)
       );
   }
+
+  isAuthenticated = (): boolean => (
+    !this.jwtHelper.isTokenExpired(localStorage.getItem(Key.TOKEN))
+  )
 
   private handleError(error: HttpErrorResponse) {
     console.log(error);

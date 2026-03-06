@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, of, startWith } from 'rxjs';
 import { DataState } from '../../enum/datastate.enum';
 import { LoginState } from '../../interface/appstates';
@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login {
+export class Login implements OnInit {
   loginState$: Observable<LoginState> = of({ dataState: DataState.LOADED });
   
   phone = signal<string>('');
@@ -23,6 +23,10 @@ export class Login {
   readonly DataState = DataState;
   
   constructor(private router: Router, private userService: UserService) {}
+
+  ngOnInit(): void {
+    this.userService.isAuthenticated() ? this.router.navigate(['/']) : this.router.navigate(['/login']);
+  }
 
   login(loginForm: NgForm): void {
     const { email, password } = loginForm.value;
