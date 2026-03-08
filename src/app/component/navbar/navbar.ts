@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { User } from '../../interface/user';
+import { UserService } from '../../service/user';
 
 @Component({
   selector: 'app-navbar',
@@ -10,8 +11,11 @@ import { User } from '../../interface/user';
 })
 export class Navbar {
   @Input() user: User | undefined;
+
+  constructor(private router: Router, private userService: UserService) {}
   
   logOut(): void {
-
+    this.userService.logOut$();
+    this.router.navigate(['/login']);
   }
 }

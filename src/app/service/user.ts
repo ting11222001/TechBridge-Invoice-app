@@ -80,6 +80,11 @@ export class UserService {
     !this.jwtHelper.isTokenExpired(localStorage.getItem(Key.TOKEN))
   )
 
+  logOut$() {
+    localStorage.removeItem(Key.TOKEN);
+    localStorage.removeItem(Key.REFRESH_TOKEN);
+  }
+
   private handleError(error: HttpErrorResponse) {
     console.log(error);
     let errorMessage: string;
