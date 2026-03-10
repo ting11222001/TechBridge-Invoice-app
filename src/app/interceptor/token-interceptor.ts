@@ -4,9 +4,12 @@ import { catchError, Observable, switchMap, tap, throwError } from 'rxjs';
 import { inject } from '@angular/core';
 import { UserService } from '../service/user';
 
+/**
+ * @param request = the outgoing HTTP request
+ * @param next = the function that passes the request to the next step in Angular's HTTP pipeline
+ * @returns Observable<HttpEvent<unknown>> This means the interceptor cannot just return random data. It must return an HTTP event stream.
+ */
 export function tokenInterceptor(request: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
-  // console.log('[Outgoing Request]');
-
   const userService = inject(UserService);
 
   if (request.url.includes('verify') || 
@@ -15,23 +18,23 @@ export function tokenInterceptor(request: HttpRequest<unknown>, next: HttpHandle
     request.url.includes('refresh') ||
     request.url.includes('resetpassword')
   ) {
-      // console.log('Does not need to intercept');
+      // Do not need to intercept here as they don't need access tokens
       return next(request);
   }
 
   return next(addAuthorizationTokenHeader(request))
   .pipe(
     catchError((error: HttpErrorResponse) => {
+      // Token expired and needs to be refreshed
       if (error instanceof HttpErrorResponse && error.status === 401 && error.error.status.includes('UNAUTHORIZED')) {
-        // console.log('Token expired and needs to be refreshed');
-        
         return userService.refreshToken$()
           .pipe(
             switchMap((response) => {
               // console.log('New Token:', response.data?.access_token);
               // console.log('Sending original request:', request);
-
-              return next(addAuthorizationTokenHeader(request))
+              
+              // When refresh succeeds, send the original request again with the new token
+              return next(addAuthorizationTokenHeader(request));
             })
           );
       }
