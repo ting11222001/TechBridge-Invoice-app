@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { CustomHttpResponse } from '../interface/appstates';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { CustomHttpResponse, CustomersPageResponse } from '../interface/appstates';
 import { catchError, tap, throwError } from 'rxjs';
 
 @Injectable({
@@ -11,9 +11,9 @@ export class CustomerService {
 
   constructor(private http: HttpClient) {}
 
-  customers$ (page: number = 0, size: number = 0) {
-    return this.http.get<CustomHttpResponse<any>>
-      (`${this.server}/customer/list?page=${page}?size=${size}`)
+  customers$ (page: number = 0) {
+    return this.http.get<CustomHttpResponse<CustomersPageResponse>>
+      (`${this.server}/customer/list?page=${page}`)
       .pipe(
         tap(response => console.log(response)),
         catchError(this.handleError)
