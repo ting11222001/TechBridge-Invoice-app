@@ -3,7 +3,7 @@ import { Component, signal } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { BehaviorSubject, catchError, map, Observable, of, startWith } from 'rxjs';
-import { CustomHttpResponse, ProfileState } from '../../interface/appstates';
+import { CustomHttpResponse, Profile } from '../../interface/appstates';
 import { DataState } from '../../enum/datastate.enum';
 import { UserService } from '../../service/user';
 import { State } from '../../interface/state';
@@ -15,9 +15,9 @@ import { Navbar } from '../navbar/navbar';
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
-export class Profile {
-  profileState$!: Observable<State<CustomHttpResponse<ProfileState>>>;
-  private dataSubject = new BehaviorSubject<CustomHttpResponse<ProfileState> | undefined>(undefined);
+export class ProfileComponent {
+  profileState$!: Observable<State<CustomHttpResponse<Profile>>>;
+  private dataSubject = new BehaviorSubject<CustomHttpResponse<Profile> | undefined>(undefined);
   readonly DataState = DataState;
 
   // private isLoadingSubject = new BehaviorSubject<boolean>(false);

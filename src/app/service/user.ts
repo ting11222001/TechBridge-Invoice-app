@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, tap, throwError } from 'rxjs';
-import { CustomHttpResponse, ProfileState } from '../interface/appstates';
+import { catchError, tap, throwError } from 'rxjs';
+import { CustomHttpResponse, Profile } from '../interface/appstates';
 import { Key } from '../enum/key.enum';
 import { User } from '../interface/user';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -16,7 +16,7 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   login$ (email: string, password: string) {
-    return this.http.post<CustomHttpResponse<ProfileState>>
+    return this.http.post<CustomHttpResponse<Profile>>
       (`${this.server}/user/login`, { email, password }) // url same as the UserResource in the backend
       .pipe(
         tap(response => console.log(response)),
@@ -25,7 +25,7 @@ export class UserService {
   }
 
   verifyCode$ (email: string, code: string) {
-    return this.http.get<CustomHttpResponse<ProfileState>>
+    return this.http.get<CustomHttpResponse<Profile>>
       (`${this.server}/user/verify/code/${email}/${code}`)
       .pipe(
         tap(response => console.log(response)),
@@ -34,7 +34,7 @@ export class UserService {
   }
     
   profile$ () {
-    return this.http.get<CustomHttpResponse<ProfileState>>
+    return this.http.get<CustomHttpResponse<Profile>>
       // (`${this.server}/user/profile`, { headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem(Key.TOKEN)}`)})
       (`${this.server}/user/profile`)
       .pipe(
@@ -47,7 +47,7 @@ export class UserService {
   }
 
   updateProfile$ (user: User) {
-    return this.http.patch<CustomHttpResponse<ProfileState>>
+    return this.http.patch<CustomHttpResponse<Profile>>
       // (`${this.server}/user/update`, user, { headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem(Key.TOKEN)}`)})
        (`${this.server}/user/update`, user)
       .pipe(
@@ -60,7 +60,7 @@ export class UserService {
   }
 
   refreshToken$ () {
-    return this.http.get<CustomHttpResponse<ProfileState>>
+    return this.http.get<CustomHttpResponse<Profile>>
        (`${this.server}/user/refresh/token`, { headers: { Authorization: `Bearer ${localStorage.getItem(Key.REFRESH_TOKEN)}` }} )
       .pipe(
         tap(response => {

@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './resetpassword.html',
   styleUrl: './resetpassword.css',
 })
-export class Resetpassword {
+export class ResetpasswordComponent {
 
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, of, startWith } from 'rxjs';
 import { DataState } from '../../enum/datastate.enum';
-import { LoginState } from '../../interface/appstates';
+import { Login } from '../../interface/appstates';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../service/user';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -14,8 +14,8 @@ import { CommonModule } from '@angular/common';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login implements OnInit {
-  loginState$: Observable<LoginState> = of({ dataState: DataState.LOADED });
+export class LoginComponent implements OnInit {
+  loginState$: Observable<Login> = of({ dataState: DataState.LOADED });
   
   phone = signal<string>('');
   email = signal<string>('');
