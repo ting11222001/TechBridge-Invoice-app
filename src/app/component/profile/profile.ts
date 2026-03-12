@@ -30,8 +30,6 @@ export class ProfileComponent {
       .pipe(
         map(response => {
           this.data.set(response);
-          // console.log("getProfile this.dataSubject.value:");
-          // console.log(this.dataSubject.value);
           this.isLoading.set(false);
           return { 
             dataState: DataState.LOADED, 
