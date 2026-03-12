@@ -7,11 +7,11 @@ import { CustomHttpResponse, Profile } from '../../interface/appstates';
 import { DataState } from '../../enum/datastate.enum';
 import { UserService } from '../../service/user';
 import { State } from '../../interface/state';
-import { Navbar } from '../navbar/navbar';
+import { NavbarComponent } from '../navbar/navbar';
 
 @Component({
   selector: 'app-profile',
-  imports: [FormsModule, CommonModule, RouterModule, DatePipe, Navbar],
+  imports: [FormsModule, CommonModule, RouterModule, DatePipe, NavbarComponent],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })

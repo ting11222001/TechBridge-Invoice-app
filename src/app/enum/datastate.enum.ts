@@ -1,5 +1,5 @@
 export enum DataState {
-    LOADING = 'LOADING_STATE',
-    LOADED = 'LOADED_STATE',
-    ERROR = 'ERROR_STATE',
+    LOADING = 'LOADING_STATE',  // HTTP request in progress
+    LOADED = 'LOADED_STATE',    // Data arrived
+    ERROR = 'ERROR_STATE',      /// Request failed
 }

@@ -9,7 +9,7 @@ import { UserService } from '../../service/user';
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
-export class Navbar {
+export class NavbarComponent {
   @Input() user: User | undefined;
 
   constructor(private router: Router, private userService: UserService) {}

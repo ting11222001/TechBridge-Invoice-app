@@ -15,7 +15,7 @@ export class CustomerService {
     return this.http.get<CustomHttpResponse<CustomersPageResponse>>
       (`${this.server}/customer/list?page=${page}`)
       .pipe(
-        tap(response => console.log(response)),
+        tap(response => console.log("CustomerService get customers response: ", response)),
         catchError(this.handleError)
       );
   }

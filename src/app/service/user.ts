@@ -19,7 +19,7 @@ export class UserService {
     return this.http.post<CustomHttpResponse<Profile>>
       (`${this.server}/user/login`, { email, password }) // url same as the UserResource in the backend
       .pipe(
-        tap(response => console.log(response)),
+        tap(response => console.log("UserService login response: ", response)),
         catchError(this.handleError)
       );
   }
@@ -28,7 +28,7 @@ export class UserService {
     return this.http.get<CustomHttpResponse<Profile>>
       (`${this.server}/user/verify/code/${email}/${code}`)
       .pipe(
-        tap(response => console.log(response)),
+        tap(response => console.log("UserService verifyCode response: ", response)),
         catchError(this.handleError)
       );    
   }
@@ -38,10 +38,7 @@ export class UserService {
       // (`${this.server}/user/profile`, { headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem(Key.TOKEN)}`)})
       (`${this.server}/user/profile`)
       .pipe(
-        tap(response => {
-          console.log("profile$ response:");
-          console.log(response);
-        }),
+        tap(response => console.log("UserService profile response: ", response)),
         catchError(this.handleError)
       );
   }
@@ -51,10 +48,7 @@ export class UserService {
       // (`${this.server}/user/update`, user, { headers: new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem(Key.TOKEN)}`)})
        (`${this.server}/user/update`, user)
       .pipe(
-        tap(response => {
-          console.log("updateProfile$ response:");
-          console.log(response);
-        }),
+        tap(response => console.log("UserService updateProfile response: ", response)),
         catchError(this.handleError)
       );
   }
@@ -64,8 +58,7 @@ export class UserService {
        (`${this.server}/user/refresh/token`, { headers: { Authorization: `Bearer ${localStorage.getItem(Key.REFRESH_TOKEN)}` }} )
       .pipe(
         tap(response => {
-          console.log("refreshToken$ response:");
-          console.log(response);
+          console.log("UserService refreshToken response: ", response)
 
           localStorage.removeItem(Key.TOKEN);
           localStorage.removeItem(Key.REFRESH_TOKEN);
