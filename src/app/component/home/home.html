@@ -39,8 +39,7 @@
                               <td>{{ customer.email }}</td>                          
                               <td>{{ customer.phone }}</td>
                               <td>
-                                 <span class="badge bg-primary"
-                                 >
+                                 <span class="badge bg-primary">
                                     {{ customer.status }}
                                  </span>
                               </td>
@@ -58,7 +57,8 @@
                               <li [ngClass]="0 == currentPage() ? 'disabled' : ''" class="page-item pointer">
                                  <a 
                                     (click)="goToNextOrPreviousPage('backward')"
-                                    class="page-link">&laquo; Prev</a>
+                                    class="page-link">&laquo; Prev
+                                 </a>
                               </li>
                               <li
                                  *ngFor="let pageNumber of [].constructor(state?.appData?.data?.page?.totalPages); let i = index;" 
@@ -74,7 +74,8 @@
                               <li [ngClass]="((state?.appData?.data?.page?.totalPages ?? 0) - 1) == currentPage() ? 'disabled' : ''" class="page-item pointer">
                                  <a 
                                     (click)="goToNextOrPreviousPage('forward')"
-                                    class="page-link">Next &raquo;</a>
+                                    class="page-link">Next &raquo;
+                                 </a>
                               </li>
                            </ul>
                         </nav>
