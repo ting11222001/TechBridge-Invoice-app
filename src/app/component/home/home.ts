@@ -4,11 +4,10 @@ import { Navbar } from '../navbar/navbar';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { BehaviorSubject, catchError, map, Observable, of, startWith } from 'rxjs';
+import { catchError, map, Observable, of, startWith } from 'rxjs';
 import { State } from '../../interface/state';
 import { CustomersPageResponse, CustomHttpResponse } from '../../interface/appstates';
 import { CustomerService } from '../../service/customer';
-import { UserService } from '../../service/user';
 import { DataState } from '../../enum/datastate.enum';
 import { Customer } from '../../interface/customer';
 
@@ -19,19 +18,22 @@ import { Customer } from '../../interface/customer';
   styleUrl: './home.css',
 })
 export class HomeComponent {
+  // Observable for API
   homeState$!: Observable<State<CustomHttpResponse<CustomersPageResponse>>>;
-  private dataSubject = new BehaviorSubject<CustomHttpResponse<CustomersPageResponse> | undefined>(undefined);
+  
+  // Signals for UI state
+  private data = signal<CustomHttpResponse<CustomersPageResponse> | undefined>(undefined);
   readonly DataState = DataState;
-
+  
   currentPage = signal<number>(0);
 
-  constructor(private customerService: CustomerService) { }
+  constructor(private customerService: CustomerService) {}
 
   ngOnInit(): void {
     this.homeState$ = this.customerService.customers$()
       .pipe(
         map(response => {
-          this.dataSubject.next(response);
+          this.data.set(response);
           return { 
             dataState: DataState.LOADED, 
             appData: response 
@@ -43,7 +45,7 @@ export class HomeComponent {
         catchError((error: string) => {
           return of({ 
             dataState: DataState.ERROR, 
-            appData: this.dataSubject.value,
+            appData: this.data(),
             error 
           })
         })
@@ -54,7 +56,7 @@ export class HomeComponent {
     this.homeState$ = this.customerService.customers$(pageNumber)
       .pipe(
         map(response => {
-          this.dataSubject.next(response);
+          this.data.set(response);
           this.currentPage.set(pageNumber);
           return { 
             dataState: DataState.LOADED, 
@@ -63,12 +65,12 @@ export class HomeComponent {
         }),
         startWith({ 
           dataState: DataState.LOADED, // Before the HTTP request finishes, emit the previous data
-          appData: this.dataSubject.value
+          appData: this.data()
         }),
         catchError((error: string) => {
           return of({ 
             dataState: DataState.LOADED,  // keep the same data
-            appData: this.dataSubject.value,
+            appData: this.data(),
             error 
           })
         })
