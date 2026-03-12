@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Stats } from '../../interface/stats';
 
 @Component({
   selector: 'app-stats',
@@ -6,6 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './stats.html',
   styleUrl: './stats.css',
 })
-export class Stats {
-
+export class StatsComponent {
+  @Input() stats: Stats | undefined;
 }

@@ -2,6 +2,7 @@ import { DataState } from "../enum/datastate.enum";
 import { Customer } from "./customer";
 import { Events } from "./event";
 import { Role } from "./role";
+import { Stats } from "./stats";
 import { User } from "./user";
 
 export interface Login {
@@ -47,4 +48,5 @@ export interface Page {
 export interface CustomersPageResponse {
     page: Page;
     user: User;
+    stats: Stats;
 }

@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
-import { Stats } from '../stats/stats';
-import { Navbar } from '../navbar/navbar';
+import { StatsComponent } from '../stats/stats';
+import { NavbarComponent } from '../navbar/navbar';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -13,7 +13,7 @@ import { Customer } from '../../interface/customer';
 
 @Component({
   selector: 'app-home',
-  imports: [FormsModule, CommonModule,Stats, RouterModule, Navbar],
+  imports: [FormsModule, CommonModule, StatsComponent, RouterModule, NavbarComponent],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -24,7 +24,7 @@ export class HomeComponent {
   // Signals for UI state
   private data = signal<CustomHttpResponse<CustomersPageResponse> | undefined>(undefined);
   readonly DataState = DataState;
-  
+
   currentPage = signal<number>(0);
 
   constructor(private customerService: CustomerService) {}
