@@ -40,7 +40,7 @@ export interface Page {
     totalElements: number;
     numberOfElements: number;
     size: number;
-    number: number;
+    number: number; // page number and it starts from 0 (default page = 0 in backend CustomerResource > getCustomers)
 }
 
 // this defines the final shape of the backend response from customerService.customers$

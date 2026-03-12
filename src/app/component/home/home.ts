@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Stats } from '../stats/stats';
 import { Navbar } from '../navbar/navbar';
 import { CommonModule } from '@angular/common';
@@ -23,6 +23,14 @@ export class HomeComponent {
   private dataSubject = new BehaviorSubject<CustomHttpResponse<CustomersPageResponse> | undefined>(undefined);
   readonly DataState = DataState;
 
+  // private isLoadingSubject = new BehaviorSubject<boolean>(false);
+  // isLoading$ = this.isLoadingSubject.asObservable();
+  isLoading = signal<boolean>(true);
+
+  private currentPageSubject = new BehaviorSubject<number>(0);
+  currentPage$ = this.currentPageSubject.asObservable();
+  // signal
+
   constructor(private userService: UserService, private customerService: CustomerService) { }
 
   ngOnInit(): void {
@@ -46,6 +54,36 @@ export class HomeComponent {
           })
         })
       )
+  }
+
+  goToPage(pageNumber: number): void {
+    this.homeState$ = this.customerService.customers$(pageNumber)
+      .pipe(
+        map(response => {
+          this.dataSubject.next(response);
+          this.currentPageSubject.next(pageNumber);
+          return { 
+            dataState: DataState.LOADED, 
+            appData: response // Then when API returns, emit the new data
+          };
+        }),
+        startWith({ 
+          dataState: DataState.LOADED, // Before the HTTP request finishes, emit the previous data
+          appData: this.dataSubject.value
+        }),
+        catchError((error: string) => {
+          return of({ 
+            dataState: DataState.LOADED,  // keep the same data
+            appData: this.dataSubject.value,
+            error 
+          })
+        })
+      )
+  }
+
+  goToNextOrPreviousPage(direction?: string): void {
+    // in the template, it needs to disable the prev button when the current page value is less than zero
+    this.goToPage(direction === 'forward' ? this.currentPageSubject.value + 1 : this.currentPageSubject.value - 1);
   }
 
   selectedCustomer(customer: Customer): void {}

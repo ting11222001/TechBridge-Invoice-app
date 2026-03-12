@@ -9,6 +9,6 @@ export interface Customer {
     status: string;
     imageUrl: string;
     phone: string;
-    createdAd: Date;
+    createdAt: Date;
     invoices?: Invoice[];
 }
