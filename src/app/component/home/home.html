@@ -55,7 +55,7 @@
                      @if ((state?.appData?.data?.page?.content?.length ?? 0) > 0) {
                         <nav aria-label="Page navigation example">
                            <ul class="pagination justify-content-end">
-                              <li [ngClass]="0 == (currentPage$ | async) ? 'disabled' : ''" class="page-item pointer">
+                              <li [ngClass]="0 == currentPage() ? 'disabled' : ''" class="page-item pointer">
                                  <a 
                                     (click)="goToNextOrPreviousPage('backward')"
                                     class="page-link">&laquo; Prev</a>
@@ -66,12 +66,12 @@
                               >
                                  <a 
                                     (click)="goToPage(i)"
-                                    [ngClass]="i == (currentPage$ | async) ? 'active' : ''"
+                                    [ngClass]="i == currentPage() ? 'active' : ''"
                                     class="page-link">
                                     {{ i + 1 }}
                                  </a>
                               </li>
-                              <li [ngClass]="((state?.appData?.data?.page?.totalPages ?? 0) - 1) == (currentPage$ | async) ? 'disabled' : ''" class="page-item pointer">
+                              <li [ngClass]="((state?.appData?.data?.page?.totalPages ?? 0) - 1) == currentPage() ? 'disabled' : ''" class="page-item pointer">
                                  <a 
                                     (click)="goToNextOrPreviousPage('forward')"
                                     class="page-link">Next &raquo;</a>

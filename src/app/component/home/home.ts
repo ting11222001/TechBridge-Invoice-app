@@ -23,15 +23,9 @@ export class HomeComponent {
   private dataSubject = new BehaviorSubject<CustomHttpResponse<CustomersPageResponse> | undefined>(undefined);
   readonly DataState = DataState;
 
-  // private isLoadingSubject = new BehaviorSubject<boolean>(false);
-  // isLoading$ = this.isLoadingSubject.asObservable();
-  isLoading = signal<boolean>(true);
+  currentPage = signal<number>(0);
 
-  private currentPageSubject = new BehaviorSubject<number>(0);
-  currentPage$ = this.currentPageSubject.asObservable();
-  // signal
-
-  constructor(private userService: UserService, private customerService: CustomerService) { }
+  constructor(private customerService: CustomerService) { }
 
   ngOnInit(): void {
     this.homeState$ = this.customerService.customers$()
@@ -61,7 +55,7 @@ export class HomeComponent {
       .pipe(
         map(response => {
           this.dataSubject.next(response);
-          this.currentPageSubject.next(pageNumber);
+          this.currentPage.set(pageNumber);
           return { 
             dataState: DataState.LOADED, 
             appData: response // Then when API returns, emit the new data
@@ -83,7 +77,7 @@ export class HomeComponent {
 
   goToNextOrPreviousPage(direction?: string): void {
     // in the template, it needs to disable the prev button when the current page value is less than zero
-    this.goToPage(direction === 'forward' ? this.currentPageSubject.value + 1 : this.currentPageSubject.value - 1);
+    this.goToPage(direction === 'forward' ? this.currentPage() + 1 : this.currentPage() - 1);
   }
 
   selectedCustomer(customer: Customer): void {}
