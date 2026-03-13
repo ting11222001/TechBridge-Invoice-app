@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { CustomHttpResponse, CustomersPageResponse } from '../interface/appstates';
 import { catchError, tap, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CustomerService {
-  private readonly server: string = 'http://localhost:8080';
+  private readonly server: string = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

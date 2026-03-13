@@ -5,12 +5,13 @@ import { CustomHttpResponse, Profile } from '../interface/appstates';
 import { Key } from '../enum/key.enum';
 import { User } from '../interface/user';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private readonly server: string = 'http://localhost:8080';
+  private readonly server: string = environment.apiUrl;
   private jwtHelper = new JwtHelperService();
 
   constructor(private http: HttpClient) {}
