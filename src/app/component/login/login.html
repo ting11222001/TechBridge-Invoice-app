@@ -1,186 +1,204 @@
 @if (loginState$ | async; as state) {
-  <section>
-    @if (!state.loginSuccess && !state.isUsingMfa) {
-      <div class="container">
-        <div class="row justify-content-center my-5">
-          <div class="col-md-6">
-            <div class="card">
-              <div class="card-body">
 
-                <!-- Login Form -->
-                <div class="text-center">
-                  <h2>
-                    <i style="margin-right: 5px;" class="bi bi-safe"></i>
-                    TechBridge-Invoice
-                  </h2>
-                </div>
+  <!-- ── Login Form ───────────────────────────────────────────────────── -->
+  @if (!state.loginSuccess && !state.isUsingMfa) {
+    <div class="min-h-screen flex items-center justify-center bg-slate-950 px-4">
 
-                @if (state.dataState === DataState.ERROR) {
-                  <div class="alert alert-danger bg-danger text-light border-0 alert-dismissible fade show" role="alert">
-                    {{ state.error }}
-                    <button type="button"
-                            class="btn-close btn-close-white"
-                            data-bs-dismiss="alert"
-                            aria-label="Close">
-                    </button>
-                  </div>
-                }
+      <!-- Subtle background glow -->
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-indigo-800/10 rounded-full blur-3xl"></div>
+      </div>
 
-                <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
-                  <div class="form-outline mb-4">
-                    <label class="form-label" for="email">Email Address</label>
-                    <input ngModel
-                          name="email"
-                          [disabled]="state.dataState === DataState.LOADING"  
-                          type="email"
-                          class="form-control"
-                          required>
-                  </div>
+      <div class="relative w-full max-w-md">
+        <!-- Card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-8">
 
-                  <div class="form-outline mb-4">
-                    <label for="password" class="form-label">Password</label>
-                    <input ngModel
-                          name="password"
-                          [disabled]="state.dataState === DataState.LOADING" 
-                          type="password"
-                          class="form-control"
-                          required>
-                  </div>
-                  
-                  <div class="d-flex justify-content-center mb-4">
-                    <button 
-                      type="submit" 
-                      [disabled]="state.dataState === DataState.LOADING ||
-                      loginForm.invalid ||
-                      loginForm.pristine"
-                      class="btn btn-primary">
-                      @if (state.dataState === DataState.LOADING) {
-                        <span
-                          class="spinner-border spinner-border-sm"
-                          role="status"
-                          aria-hidden="true"
-                          style="margin-right: 5px;">
-                        </span>
-                      }
-
-                      @if (state.dataState === DataState.LOADING) {
-                        <span>Loading...</span>
-                      } @else {
-                        <span>Log in</span>
-                      }
-                    </button>
-                  </div>
-                </form>
-
-                <div class="row mb-4">
-                  <div class="col d-flex justify-content-center">
-                    <a [ngStyle]="{'pointer-events': state.dataState === DataState.LOADING ? 'none': ''}" routerLink="/register">Create an Account</a>
-                  </div>
-                  <div class="col">
-                    <a [ngStyle]="{'pointer-events': state.dataState === DataState.LOADING ? 'none': ''}" routerLink="/resetpassword">Forgot password?</a>
-                  </div>
-                </div>
-
-              </div>
+          <!-- Header -->
+          <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-14 h-14 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl mb-4">
+              <i class="bi bi-safe text-2xl text-indigo-400"></i>
             </div>
+            <h1 class="text-2xl font-bold text-white tracking-tight">TechBridge Invoice</h1>
+            <p class="text-slate-400 text-sm mt-1">Sign in to your account</p>
           </div>
+
+          <!-- Error Alert -->
+          @if (state.dataState === DataState.ERROR) {
+            <div class="flex items-start gap-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl p-4 mb-6 text-sm">
+              <i class="bi bi-exclamation-circle-fill mt-0.5 shrink-0"></i>
+              <span>{{ state.error }}</span>
+            </div>
+          }
+
+          <!-- Form -->
+          <form #loginForm="ngForm" (ngSubmit)="login(loginForm)" class="flex flex-col gap-5">
+
+            <!-- Email -->
+            <div>
+              <label class="block text-sm font-medium text-slate-300 mb-1.5">
+                Email Address
+              </label>
+              <input
+                ngModel
+                name="email"
+                [disabled]="state.dataState === DataState.LOADING"
+                type="email"
+                placeholder="you@company.com"
+                class="w-full bg-slate-800 border border-slate-700 text-white placeholder-slate-500 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                required
+              />
+            </div>
+
+            <!-- Password -->
+            <div>
+              <label class="block text-sm font-medium text-slate-300 mb-1.5">
+                Password
+              </label>
+              <input
+                ngModel
+                name="password"
+                [disabled]="state.dataState === DataState.LOADING"
+                type="password"
+                placeholder="••••••••"
+                class="w-full bg-slate-800 border border-slate-700 text-white placeholder-slate-500 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                required
+              />
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              [disabled]="state.dataState === DataState.LOADING || loginForm.invalid || loginForm.pristine"
+              class="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-4 rounded-xl transition-colors mt-1 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              @if (state.dataState === DataState.LOADING) {
+                <svg class="animate-spin h-4 w-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+                Signing in...
+              } @else {
+                Sign In
+              }
+            </button>
+
+          </form>
+
+          <!-- Footer Links -->
+          <div class="flex justify-between mt-8 pt-6 border-t border-slate-800 text-sm">
+            <a
+              [ngStyle]="{'pointer-events': state.dataState === DataState.LOADING ? 'none' : ''}"
+              routerLink="/register"
+              class="text-indigo-400 hover:text-indigo-300 transition-colors"
+            >
+              Create an account
+            </a>
+            <a
+              [ngStyle]="{'pointer-events': state.dataState === DataState.LOADING ? 'none' : ''}"
+              routerLink="/resetpassword"
+              class="text-slate-400 hover:text-slate-300 transition-colors"
+            >
+              Forgot password?
+            </a>
+          </div>
+
         </div>
       </div>
-    }
+    </div>
+  }
 
-    <!-- Success screen -->
-     @if (state.isUsingMfa) {
-      <div class="container">
-        <div class="row justify-content-center my-5">
-          <div class="col-md-6" style="margin-top: 50px;">
-            <div class="card">
-              <div class="card-body">
+  <!-- ── MFA / Verification Screen ────────────────────────────────────── -->
+  @if (state.isUsingMfa) {
+    <div class="min-h-screen flex items-center justify-center bg-slate-950 px-4">
 
-                <div class="text-center">
-                  <h2>
-                    <i style="margin-right: 5px;" class="bi bi-safe"></i>
-                    TechBridge-Invoice
-                  </h2>
+      <!-- Subtle background glow -->
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-indigo-800/10 rounded-full blur-3xl"></div>
+      </div>
 
-                  <h5 class="card-title mt-4 mb-4">
-                    Verification Code Sent To ... {{ phone().substring(phone().length - 4) }}
-                  </h5>
+      <div class="relative w-full max-w-md">
+        <!-- Card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-8">
 
-                  <i class="bi bi-check-circle-fill"
-                    style="font-size: 30px; color: green;">
-                  </i>
-
-                  <p class="mt-2" style="font-size: 20px;">
-                    Please access your SMS and enter the code.
-                  </p>
-                </div>
-
-                @if (state.dataState === DataState.ERROR) {
-                  <div class="alert alert-danger bg-danger text-light border-0 alert-dismissible fade show" role="alert">
-                    {{ state.error }}
-                    <button type="button"
-                            class="btn-close btn-close-white"
-                            data-bs-dismiss="alert"
-                            aria-label="Close">
-                    </button>
-                  </div>
-                }
-
-                <form #verifyCodeForm="ngForm" (ngSubmit)="verifyCode(verifyCodeForm)">
-                  <div class="form-outline mb-4">
-                    <label class="form-label" for="code">
-                      Verification Code
-                    </label>
-                    <input ngModel
-                          [disabled]="state.dataState === DataState.LOADING" 
-                          type="text"
-                          name="code"
-                          class="form-control"
-                          required>
-                  </div>
-
-                  <div class="d-flex justify-content-center mb-4">
-                    <button 
-                            type="submit" 
-                            [disabled]="state.dataState === DataState.LOADING ||
-                            verifyCodeForm.invalid ||
-                            verifyCodeForm.pristine"
-                            class="btn btn-primary">
-                      @if(state.dataState === DataState.LOADING) {
-                        <span
-                              class="spinner-border spinner-border-sm"
-                              role="status"
-                              aria-hidden="true"
-                              style="margin-right: 5px;">
-                        </span>
-                      }
-                      @if (state.dataState === DataState.LOADING) {
-                        <span>Loading...</span>
-                      } @else {
-                        <span>Verify Code</span>
-                      }
-                    </button>
-                  </div>
-                </form>
-
-                <div class="row mb-4">
-                  <div class="col d-flex justify-content-center">
-                    <a (click)="loginPage()" style="color: #0D6EFD; text-decoration: underline; cursor: pointer;">
-                      Account Login
-                    </a>
-                  </div>
-                  <div class="col">
-                    <a routerLink="/register" style="color: #0D6EFD; text-decoration: underline; cursor: pointer;">
-                      Create an account
-                    </a>
-                  </div>
-                </div>
-
-              </div>
+          <!-- Header -->
+          <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-14 h-14 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl mb-4">
+              <i class="bi bi-shield-check text-2xl text-emerald-400"></i>
             </div>
+            <h1 class="text-2xl font-bold text-white tracking-tight">Two-Factor Auth</h1>
+            <p class="text-slate-300 text-sm mt-2">
+              Code sent to <span class="font-mono text-emerald-400">···· {{ phone().substring(phone().length - 4) }}</span>
+            </p>
+            <p class="text-slate-500 text-xs mt-1">Access your SMS and enter the code below</p>
           </div>
+
+          <!-- Error Alert -->
+          @if (state.dataState === DataState.ERROR) {
+            <div class="flex items-start gap-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl p-4 mb-6 text-sm">
+              <i class="bi bi-exclamation-circle-fill mt-0.5 shrink-0"></i>
+              <span>{{ state.error }}</span>
+            </div>
+          }
+
+          <!-- Verify Form -->
+          <form #verifyCodeForm="ngForm" (ngSubmit)="verifyCode(verifyCodeForm)" class="flex flex-col gap-5">
+
+            <!-- Code Input -->
+            <div>
+              <label class="block text-sm font-medium text-slate-300 mb-1.5">
+                Verification Code
+              </label>
+              <input
+                ngModel
+                name="code"
+                [disabled]="state.dataState === DataState.LOADING"
+                type="text"
+                placeholder="000000"
+                class="w-full bg-slate-800 border border-slate-700 text-white placeholder-slate-600 rounded-xl px-4 py-3 text-center text-xl font-mono tracking-[0.4em] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                required
+              />
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              [disabled]="state.dataState === DataState.LOADING || verifyCodeForm.invalid || verifyCodeForm.pristine"
+              class="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 px-4 rounded-xl transition-colors mt-1 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              @if (state.dataState === DataState.LOADING) {
+                <svg class="animate-spin h-4 w-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+                Verifying...
+              } @else {
+                Verify Code
+              }
+            </button>
+
+          </form>
+
+          <!-- Footer Links -->
+          <div class="flex justify-between mt-8 pt-6 border-t border-slate-800 text-sm">
+            <a
+              (click)="loginPage()"
+              class="text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer"
+            >
+              ← Back to Login
+            </a>
+            <a
+              routerLink="/register"
+              class="text-slate-400 hover:text-slate-300 transition-colors"
+            >
+              Create an account
+            </a>
+          </div>
+
         </div>
       </div>
-    }
-  </section>
+    </div>
+  }
+
 }
