@@ -12,8 +12,19 @@ import { UserService } from '../../service/user';
 export class NavbarComponent {
   @Input() user: User | undefined;
 
+  mobileOpen = false;
+  activeDropdown: string | null = null;
+
   constructor(private router: Router, private userService: UserService) {}
-  
+
+  toggleMobile(): void {
+    this.mobileOpen = !this.mobileOpen;
+  }
+
+  toggleDropdown(name: string): void {
+    this.activeDropdown = this.activeDropdown === name ? null : name;
+  }
+
   logOut(): void {
     this.userService.logOut$();
     this.router.navigate(['/login']);
