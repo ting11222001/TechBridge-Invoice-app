@@ -51,23 +51,8 @@ An Angular 21 invoice and customer management application built for a technology
 
 ## Architecture
 
-```mermaid
-graph TD
-    Browser["Browser"] -->|HTTP / REST| Frontend
-
-    subgraph Vercel
-        Frontend["Angular 21 SPA\n(this repo)"]
-    end
-
-    Frontend -->|REST API + JWT Bearer| Backend
-
-    subgraph Railway
-        Backend["Spring Boot 4\nREST API"]
-        DB[(MySQL)]
-        Backend --> DB
-    end
-
-    Backend -->|SMS / 2FA| Twilio["Twilio API"]
+```
+Diagram work in progress
 ```
 
 **Request flow:**

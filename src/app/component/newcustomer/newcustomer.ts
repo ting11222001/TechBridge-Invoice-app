@@ -53,7 +53,6 @@ export class NewCustomerComponent {
     this.newCustomerState$ = this.customerService.newcustomer$(newCustomerForm.value)
     .pipe(
       map(response => {
-        // this.data.set(response);
         newCustomerForm.reset({ type: 'INDIVIDUAL', status: 'ACTIVE' });
         this.isLoading.set(false);
         return {
