@@ -50,3 +50,9 @@ export interface CustomersPageResponse {
     user: User;
     stats: Stats;
 }
+
+// this defines the final shape of the backend response from customerService.newcustomer$
+export interface NewCustomerResponse {
+    customer: Customer;
+    user: User;
+}

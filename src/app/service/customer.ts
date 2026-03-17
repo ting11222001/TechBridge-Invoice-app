@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { CustomHttpResponse, CustomersPageResponse } from '../interface/appstates';
+import { CustomHttpResponse, CustomersPageResponse, NewCustomerResponse } from '../interface/appstates';
 import { catchError, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { Customer } from '../interface/customer';
+import { User } from '../interface/user';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +22,16 @@ export class CustomerService {
         catchError(this.handleError)
       );
   }
+
+  newcustomer$ (customer: Customer) {
+    return this.http.post<CustomHttpResponse<CustomersPageResponse>>
+      (`${this.server}/customer/create`, customer)
+      .pipe(
+        tap(response => console.log("CustomerService get new customer response: ", response)),
+        catchError(this.handleError)
+      );
+  }
+
 
   private handleError(error: HttpErrorResponse) {
     console.log(error);
