@@ -1,59 +1,152 @@
-# TechbridgeInvoiceApp
+# TechBridge Invoice — Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.5.
+An Angular 21 invoice and customer management application built for a technology donation platform. This repository contains the **frontend** single-page application.
 
-## Development server
+> **Backend (Spring Boot):** [https://github.com/ting11222001/TechBridge-Invoice](https://github.com/ting11222001/TechBridge-Invoice)
 
-To start a local development server, run:
+---
+
+## Features
+
+### Authentication & Security
+- JWT-based login with access token + refresh token
+- Multi-Factor Authentication (MFA) via Twilio SMS
+- Account email verification
+- Password reset via email link
+- Automatic token refresh (HTTP interceptor)
+- Route guards to protect authenticated pages
+
+### User Management
+- User registration and login
+- Profile management — name, email, phone, title, bio, avatar
+- Password change
+
+### Customer Management
+- Paginated customer list
+- Customer search
+
+### Invoice Management
+- Create invoices and associate them with customers
+- View invoice details and status
+- Paginated invoice list
+
+### Dashboard
+- Statistics overview: total customers, total invoices, total billed amount
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Angular 21 (standalone components) |
+| Styling | Bootstrap 5 |
+| Reactive | RxJS 7 |
+| Auth | @auth0/angular-jwt |
+| Language | TypeScript 5 |
+| Testing | Vitest |
+| Build | Angular CLI 21 |
+
+---
+
+## Architecture
+
+```mermaid
+graph TD
+    Browser["Browser"] -->|HTTP / REST| Frontend
+
+    subgraph Vercel
+        Frontend["Angular 21 SPA\n(this repo)"]
+    end
+
+    Frontend -->|REST API + JWT Bearer| Backend
+
+    subgraph Railway
+        Backend["Spring Boot 4\nREST API"]
+        DB[(MySQL)]
+        Backend --> DB
+    end
+
+    Backend -->|SMS / 2FA| Twilio["Twilio API"]
+```
+
+**Request flow:**
+1. User logs in → Angular sends credentials to Spring Boot
+2. Backend validates and returns JWT access + refresh tokens
+3. Angular stores tokens in `localStorage`; the HTTP interceptor attaches `Authorization: Bearer <token>` to every subsequent request
+4. On 401 response, the interceptor automatically refreshes the token and retries the original request
+
+---
+
+## Project Structure
+
+```
+src/app/
+├── component/
+│   ├── home/           # Dashboard + customer list
+│   ├── login/          # Login + MFA verification
+│   ├── register/       # User registration
+│   ├── profile/        # User profile management
+│   ├── customers/      # Customer management
+│   ├── resetpassword/  # Password reset
+│   ├── verify/         # Account & password link verification
+│   ├── navbar/         # Top navigation bar
+│   └── stats/          # Statistics display widget
+├── service/
+│   ├── user.ts         # Auth, profile, token management
+│   └── customer.ts     # Customer list API calls
+├── interface/          # TypeScript interfaces (User, Customer, Invoice, Stats…)
+├── interceptor/        # JWT token interceptor (attach + auto-refresh)
+├── enum/               # App enumerations
+└── authentication-guard.ts  # Route guard
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Node.js 20+
+- Angular CLI 21: `npm install -g @angular/cli`
+- Backend running locally or pointed at Railway (see environment config)
+
+### Local Development
 
 ```bash
+# Clone the repo
+git clone https://github.com/ting11222001/techbridge-invoice-app.git
+cd techbridge-invoice-app
+
+# Install dependencies
+npm install
+
+# Start the dev server (connects to localhost:8080 by default)
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open [http://localhost:4200](http://localhost:4200) in your browser.
 
-## Code scaffolding
+### Environment Configuration
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+| File | API URL |
+|---|---|
+| `src/environments/environment.ts` | `http://localhost:8080` |
+| `src/environments/environment.prod.ts` | `https://techbridge-invoice-production.up.railway.app` |
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+### Commands
 
 ```bash
-ng build
+ng serve       # Dev server with hot reload
+ng build       # Production build → dist/
+ng test        # Run unit tests with Vitest
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## Deployment
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+| Service | Platform |
+|---|---|
+| Frontend | [Vercel](https://vercel.com) |
+| Backend | [Railway](https://railway.app) |
+| Database | MySQL on Railway |
