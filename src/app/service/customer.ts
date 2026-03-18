@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { CustomHttpResponse, CustomersPageResponse } from '../interface/appstates';
+import { CustomHttpResponse, CustomersPageResponse, GetCustomerResponse } from '../interface/appstates';
 import { catchError, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Customer } from '../interface/customer';
@@ -22,11 +22,29 @@ export class CustomerService {
       );
   }
 
-  newcustomer$ (customer: Customer) {
+  customer$ (customerId: number) {
+    return this.http.get<CustomHttpResponse<GetCustomerResponse>>
+      (`${this.server}/customer/get/${customerId}`)
+      .pipe(
+        tap(response => console.log("CustomerService get customer response: ", response)),
+        catchError(this.handleError)
+      );
+  }
+
+  newCustomer$ (customer: Customer) {
     return this.http.post<CustomHttpResponse<CustomersPageResponse>>
       (`${this.server}/customer/create`, customer)
       .pipe(
         tap(response => console.log("CustomerService get new customer response: ", response)),
+        catchError(this.handleError)
+      );
+  }
+
+  updateCustomer$ (customer: Customer) {
+    return this.http.put<CustomHttpResponse<GetCustomerResponse>>
+      (`${this.server}/customer/update`, customer)
+      .pipe(
+        tap(response => console.log("CustomerService update customer response: ", response)),
         catchError(this.handleError)
       );
   }
@@ -38,8 +56,7 @@ export class CustomerService {
         tap(response => console.log("CustomerService search customer response: ", response)),
         catchError(this.handleError)
       );
-  } 
-
+  }
 
   private handleError(error: HttpErrorResponse) {
     console.log(error);

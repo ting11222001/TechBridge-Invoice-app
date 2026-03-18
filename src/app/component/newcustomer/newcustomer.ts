@@ -50,7 +50,7 @@ export class NewCustomerComponent {
 
   createCustomer(newCustomerForm: NgForm): void {
     this.isLoading.set(true);
-    this.newCustomerState$ = this.customerService.newcustomer$(newCustomerForm.value)
+    this.newCustomerState$ = this.customerService.newCustomer$(newCustomerForm.value)
     .pipe(
       map(response => {
         newCustomerForm.reset({ type: 'INDIVIDUAL', status: 'ACTIVE' });

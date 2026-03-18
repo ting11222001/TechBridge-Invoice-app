@@ -3,7 +3,7 @@ import { StatsComponent } from '../stats/stats';
 import { NavbarComponent } from '../navbar/navbar';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { catchError, map, Observable, of, startWith } from 'rxjs';
 import { State } from '../../interface/state';
 import { CustomersPageResponse, CustomHttpResponse } from '../../interface/appstates';
@@ -27,7 +27,7 @@ export class HomeComponent {
 
   currentPage = signal<number>(0);
 
-  constructor(private customerService: CustomerService) {}
+  constructor(private router: Router, private customerService: CustomerService) {}
 
   ngOnInit(): void {
     this.homeState$ = this.customerService.customers$()
@@ -82,5 +82,7 @@ export class HomeComponent {
     this.goToPage(direction === 'forward' ? this.currentPage() + 1 : this.currentPage() - 1);
   }
 
-  selectedCustomer(customer: Customer): void {}
+  selectedCustomer(customer: Customer): void {
+    this.router.navigate(['/customers', customer.id]);
+  }
 }

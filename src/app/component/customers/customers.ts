@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { NavbarComponent } from '../navbar/navbar';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { catchError, map, Observable, of, startWith } from 'rxjs';
 import { State } from '../../interface/state';
 import { CustomersPageResponse, CustomHttpResponse } from '../../interface/appstates';
@@ -23,7 +23,7 @@ export class CustomersComponent {
   isLoading = signal<boolean>(true);
   currentPage = signal<number>(0);
 
-  constructor(private customerService: CustomerService) {}
+  constructor(private router: Router, private customerService: CustomerService) {}
 
   ngOnInit(): void {
     this.customersState$ = this.customerService.searchCustomers$()
@@ -105,5 +105,7 @@ export class CustomersComponent {
     this.goToPage(direction === 'forward' ? this.currentPage() + 1 : this.currentPage() - 1, name);
   }
 
-  selectedCustomer(customer: Customer): void {}
+  selectedCustomer(customer: Customer): void {
+    this.router.navigate(['/customers', customer.id]);
+  }
 }

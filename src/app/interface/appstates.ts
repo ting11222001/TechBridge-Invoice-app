@@ -23,7 +23,7 @@ export interface CustomHttpResponse<T> {
     message: string;
     reason?: string;
     developerMessage?: string;
-    data?: T;
+    data: T;  // required generic type T, which will be the actual data we want to work with (e.g. CustomersPageResponse or GetCustomerResponse)
 }
 
 export interface Profile {
@@ -51,8 +51,8 @@ export interface CustomersPageResponse {
     stats: Stats;
 }
 
-// this defines the final shape of the backend response from customerService.newcustomer$
-export interface NewCustomerResponse {
+// this defines the final shape of the backend response from customerService.customer$
+export interface GetCustomerResponse {
     customer: Customer;
     user: User;
 }
