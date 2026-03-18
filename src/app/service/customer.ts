@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { CustomHttpResponse, CustomersPageResponse, NewCustomerResponse } from '../interface/appstates';
+import { CustomHttpResponse, CustomersPageResponse } from '../interface/appstates';
 import { catchError, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Customer } from '../interface/customer';
-import { User } from '../interface/user';
 
 @Injectable({
   providedIn: 'root',
@@ -31,6 +30,15 @@ export class CustomerService {
         catchError(this.handleError)
       );
   }
+
+  searchCustomers$ (name: string = '', page: number = 0) {
+    return this.http.get<CustomHttpResponse<CustomersPageResponse>>
+      (`${this.server}/customer/search?name=${name}&page=${page}`)
+      .pipe(
+        tap(response => console.log("CustomerService search customer response: ", response)),
+        catchError(this.handleError)
+      );
+  } 
 
 
   private handleError(error: HttpErrorResponse) {
