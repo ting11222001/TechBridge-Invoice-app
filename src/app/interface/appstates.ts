@@ -56,3 +56,9 @@ export interface GetCustomerResponse {
     customer: Customer;
     user: User;
 }
+
+// this defines the final shape of the backend response from customerService.newInvoice$
+export interface NewInvoiceResponse {
+    customers: Customer[];
+    user: User;
+}

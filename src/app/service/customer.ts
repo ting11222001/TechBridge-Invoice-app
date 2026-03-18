@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { CustomHttpResponse, CustomersPageResponse, GetCustomerResponse } from '../interface/appstates';
+import { CustomHttpResponse, CustomersPageResponse, GetCustomerResponse, NewInvoiceResponse } from '../interface/appstates';
 import { catchError, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Customer } from '../interface/customer';
+import { Invoice } from '../interface/invoice';
 
 @Injectable({
   providedIn: 'root',
@@ -54,6 +55,24 @@ export class CustomerService {
       (`${this.server}/customer/search?name=${name}&page=${page}`)
       .pipe(
         tap(response => console.log("CustomerService search customer response: ", response)),
+        catchError(this.handleError)
+      );
+  }
+
+  newInvoice$ () {
+    return this.http.get<CustomHttpResponse<NewInvoiceResponse>>
+      (`${this.server}/customer/invoice/new`)
+      .pipe(
+        tap(response => console.log("CustomerService new invoice response: ", response)),
+        catchError(this.handleError)
+      );
+  }
+
+  createInvoice$ (customerId: number, invoice: Invoice) {   // create invoice for a specific customer
+    return this.http.put<CustomHttpResponse<NewInvoiceResponse>>
+      (`${this.server}/customer/invoice/addToCustomer/${customerId}`, invoice)
+      .pipe(
+        tap(response => console.log("CustomerService create invoice response: ", response)),
         catchError(this.handleError)
       );
   }
