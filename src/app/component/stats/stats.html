@@ -1,38 +1,32 @@
-<section>
-   <div class="container mt-2">
-      <div class="container bootstrap snippets bootdey">
-         <div class="row">
-            <div class="col-md-4 col-sm-6 col-xs-12">
-               <div class="mini-stat clearfix bg-facebook rounded">
-                  <span class="mini-stat-icon">
-                     <i class="bi bi-people-fill fg-facebook"></i> </span>
-                  <div class="mini-stat-info text-end">
-                     <span>{{ stats?.totalCustomers }}</span>
-                     Total Customers
-                  </div>
-               </div>
-            </div>
-            <div class="col-md-4 col-sm-6 col-xs-12">
-               <div class="mini-stat clearfix bg-googleplus rounded">
-                  <span class="mini-stat-icon">
-                     <i class="bi bi-receipt-cutoff fg-googleplus"></i></span>
-                  <div class="mini-stat-info text-end">
-                     <span>{{ stats?.totalInvoices }}</span>
-                     Total Invoices
-                  </div>
-               </div>
-            </div>
-            <div class="col-md-4 col-sm-6 col-xs-12">
-               <div class="mini-stat clearfix bg-twitter rounded">
-                  <span class="mini-stat-icon">
-                     <i class="bi bi-currency-dollar fg-twitter"></i></span>
-                  <div class="mini-stat-info text-end">
-                     <span>${{ stats?.totalBilled }}</span>
-                     Total Billed
-                  </div>
-               </div>
-            </div>
-         </div>
+<section class="mt-4 px-4">
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+    <!-- Total Customers -->
+    <div class="bg-[#1a2236] border border-[#2a3450] rounded-xl p-6 flex flex-col gap-2">
+      <div class="flex items-center gap-2 text-slate-400 text-sm">
+        <i class="bi bi-people-fill text-blue-400"></i>
+        Total Customers
       </div>
-   </div>
+      <p class="text-white text-3xl font-bold tracking-tight">{{ stats?.totalCustomers }}</p>
+    </div>
+
+    <!-- Total Invoices -->
+    <div class="bg-[#1a2236] border border-[#2a3450] rounded-xl p-6 flex flex-col gap-2">
+      <div class="flex items-center gap-2 text-slate-400 text-sm">
+        <i class="bi bi-receipt-cutoff text-emerald-400"></i>
+        Total Invoices
+      </div>
+      <p class="text-white text-3xl font-bold tracking-tight">{{ stats?.totalInvoices }}</p>
+    </div>
+
+    <!-- Total Billed -->
+    <div class="bg-[#1a2236] border border-[#2a3450] rounded-xl p-6 flex flex-col gap-2">
+      <div class="flex items-center gap-2 text-slate-400 text-sm">
+        <i class="bi bi-currency-dollar text-violet-400"></i>
+        Total Billed
+      </div>
+      <p class="text-white text-3xl font-bold tracking-tight">${{ stats?.totalBilled }}</p>
+    </div>
+
+  </div>
 </section>
