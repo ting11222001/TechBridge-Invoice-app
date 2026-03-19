@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { CustomHttpResponse, CustomersPageResponse, GetCustomerResponse, NewInvoiceResponse } from '../interface/appstates';
+import { CustomHttpResponse, CustomersPageResponse, GetCustomerResponse, InvoicesPageResponse, NewInvoiceResponse } from '../interface/appstates';
 import { catchError, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Customer } from '../interface/customer';
@@ -73,6 +73,15 @@ export class CustomerService {
       (`${this.server}/customer/invoice/addToCustomer/${customerId}`, invoice)
       .pipe(
         tap(response => console.log("CustomerService create invoice response: ", response)),
+        catchError(this.handleError)
+      );
+  }
+
+  invoices$ (page: number = 0) {   // get invoices
+    return this.http.get<CustomHttpResponse<InvoicesPageResponse>>
+      (`${this.server}/customer/invoice/list?page=${page}`)
+      .pipe(
+        tap(response => console.log("CustomerService get invoices response: ", response)),
         catchError(this.handleError)
       );
   }

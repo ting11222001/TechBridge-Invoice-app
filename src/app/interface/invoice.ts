@@ -4,5 +4,5 @@ export interface Invoice {
     services: string;
     status: string;
     total: number;
-    createdAt: Date;
+    date: Date;
 }

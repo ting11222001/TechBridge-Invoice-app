@@ -1,6 +1,7 @@
 import { DataState } from "../enum/datastate.enum";
 import { Customer } from "./customer";
 import { Events } from "./event";
+import { Invoice } from "./invoice";
 import { Role } from "./role";
 import { Stats } from "./stats";
 import { User } from "./user";
@@ -35,8 +36,8 @@ export interface Profile {
 }
 
 // when creating this, I looked at the response from customerService.customers$
-export interface Page {
-    content: Customer[];
+export interface Page<T> {
+    content: T[];
     totalPages: number;
     totalElements: number;
     numberOfElements: number;
@@ -46,7 +47,7 @@ export interface Page {
 
 // this defines the final shape of the backend response from customerService.customers$
 export interface CustomersPageResponse {
-    page: Page;
+    page: Page<Customer>;
     user: User;
     stats: Stats;
 }
@@ -61,4 +62,11 @@ export interface GetCustomerResponse {
 export interface NewInvoiceResponse {
     customers: Customer[];
     user: User;
+}
+
+// this defines the final shape of the backend response from customerService.invoices$
+export interface InvoicesPageResponse {
+    page: Page<Invoice>;
+    user: User;
+    stats: Stats;
 }
