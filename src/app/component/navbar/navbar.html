@@ -1,42 +1,134 @@
-<!-- Navigation-->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-       <a class="navbar-brand" [routerLink]="['/']">
-           <i style="margin-right: 5px;" class="bi bi-safe"></i>
-           TechBridge-Invoices
-       </a>
-       <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-          aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                   Customers
+<nav class="relative bg-gray-800/50 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10">
+  <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+    <div class="relative flex h-16 items-center justify-between">
+
+      <!-- Mobile menu button -->
+      <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+        <button type="button"
+                (click)="mobileOpen = !mobileOpen"
+                class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-500">
+          <span class="absolute -inset-0.5"></span>
+          <span class="sr-only">Open main menu</span>
+          @if (!mobileOpen) {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="size-6">
+              <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          } @else {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="size-6">
+              <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          }
+        </button>
+      </div>
+
+      <!-- Brand + Desktop nav -->
+      <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+        <div class="flex shrink-0 items-center">
+          <a [routerLink]="['/']" class="text-white font-semibold text-sm flex items-center gap-2">
+            <i class="bi bi-safe text-indigo-400 text-lg"></i>
+            TechBridge-Invoices
+          </a>
+        </div>
+
+        <!-- Desktop nav links -->
+        <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-1">
+
+          <!-- Customers dropdown -->
+          <div class="relative">
+            <button type="button"
+                    (click)="toggleCustomers()"
+                    class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white flex items-center gap-1">
+              Customers
+              <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+              </svg>
+            </button>
+            @if (customersOpen) {
+              <div class="absolute left-0 z-10 mt-1 w-44 rounded-md bg-gray-800 py-1 outline -outline-offset-1 outline-white/10 shadow-lg">
+                <a [routerLink]="['/customers/new']" (click)="customersOpen = false" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
+                  <i class="bi bi-person-plus-fill"></i> New Customer
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                   <li><a class="dropdown-item" [routerLink]="['/customers/new']"><i style="padding-right: 8px;" class="bi bi-person-plus-fill"></i>New Customer</a></li>
-                   <li><a class="dropdown-item" [routerLink]="['/customers']"><i style="padding-right: 8px;" class="bi bi-people-fill"></i>All Customers</a></li>
-                </ul>
-             </li>
-             <li class="nav-item dropdown">
-               <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Invoices
-               </a>
-               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                  <li><a class="dropdown-item" [routerLink]="['/invoices/new']"><i style="padding-right: 8px;" class="bi bi-receipt"></i>New Invoice</a></li>
-                  <li><a class="dropdown-item" [routerLink]="['/invoices']"><i style="padding-right: 8px;" class="bi bi-receipt-cutoff"></i>All Invoices</a></li>
-               </ul>
-            </li>
-             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img [src]="user?.imageUrl" [alt]="user?.firstName" class="user-avatar-md rounded-circle"></a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
-                   <li><a class="dropdown-item" [routerLink]="['/profile']"><i style="padding-right: 8px;" class="bi bi-person-circle"></i>{{ user?.firstName }} {{ user?.lastName }}</a></li>
-                   <li style="cursor: pointer;"><a class="dropdown-item" (click)="logOut()"><i style="padding-right: 8px;" class="bi bi-box-arrow-in-right"></i>Logout</a></li>
-                </ul>
-             </li>
-          </ul>
-       </div>
+                <a [routerLink]="['/customers']" (click)="customersOpen = false" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
+                  <i class="bi bi-people-fill"></i> All Customers
+                </a>
+              </div>
+            }
+          </div>
+
+          <!-- Invoices dropdown -->
+          <div class="relative">
+            <button type="button"
+                    (click)="toggleInvoices()"
+                    class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white flex items-center gap-1">
+              Invoices
+              <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+              </svg>
+            </button>
+            @if (invoicesOpen) {
+              <div class="absolute left-0 z-10 mt-1 w-44 rounded-md bg-gray-800 py-1 outline -outline-offset-1 outline-white/10 shadow-lg">
+                <a [routerLink]="['/invoices/new']" (click)="invoicesOpen = false" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
+                  <i class="bi bi-receipt"></i> New Invoice
+                </a>
+                <a [routerLink]="['/invoices']" (click)="invoicesOpen = false" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
+                  <i class="bi bi-receipt-cutoff"></i> All Invoices
+                </a>
+              </div>
+            }
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right side: user avatar -->
+      <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+        <div class="relative ml-3">
+          <button type="button"
+                  (click)="toggleProfile()"
+                  class="relative flex cursor-pointer rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+            <span class="absolute -inset-1.5"></span>
+            <span class="sr-only">Open user menu</span>
+            <img [src]="user?.imageUrl" [alt]="user?.firstName" class="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10 object-cover" />
+          </button>
+          @if (profileOpen) {
+            <div class="absolute right-0 z-10 mt-2 w-48 rounded-md bg-gray-800 py-1 outline -outline-offset-1 outline-white/10 shadow-lg">
+              <a [routerLink]="['/profile']" (click)="profileOpen = false" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
+                <i class="bi bi-person-circle"></i> {{ user?.firstName }} {{ user?.lastName }}
+              </a>
+              <button type="button" (click)="logOut()" class="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white">
+                <i class="bi bi-box-arrow-in-right"></i> Logout
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+
     </div>
- </nav>
+  </div>
+
+  <!-- Mobile menu -->
+  @if (mobileOpen) {
+    <div class="sm:hidden">
+      <div class="space-y-1 px-2 pt-2 pb-3">
+        <a [routerLink]="['/customers/new']" (click)="mobileOpen = false" class="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">
+          <i class="bi bi-person-plus-fill"></i> New Customer
+        </a>
+        <a [routerLink]="['/customers']" (click)="mobileOpen = false" class="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">
+          <i class="bi bi-people-fill"></i> All Customers
+        </a>
+        <a [routerLink]="['/invoices/new']" (click)="mobileOpen = false" class="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">
+          <i class="bi bi-receipt"></i> New Invoice
+        </a>
+        <a [routerLink]="['/invoices']" (click)="mobileOpen = false" class="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">
+          <i class="bi bi-receipt-cutoff"></i> All Invoices
+        </a>
+        <a [routerLink]="['/profile']" (click)="mobileOpen = false" class="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">
+          <i class="bi bi-person-circle"></i> Profile
+        </a>
+        <button type="button" (click)="logOut()" class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-white/5 hover:text-white">
+          <i class="bi bi-box-arrow-in-right"></i> Logout
+        </button>
+      </div>
+    </div>
+  }
+</nav>
