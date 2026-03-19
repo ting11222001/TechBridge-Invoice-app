@@ -70,3 +70,10 @@ export interface InvoicesPageResponse {
     user: User;
     stats: Stats;
 }
+
+// this defines the final shape of the backend response from customerService.invoice$
+export interface GetInvoiceResponse {
+    customer: Customer;
+    invoice: Invoice;
+    user: User;
+}

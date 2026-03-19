@@ -77,7 +77,7 @@ export class InvoicesComponent implements OnInit {
     );
   }
 
-  goToNextOrPreviousPage(direction?: string, name?: string): void {
+  goToNextOrPreviousPage(direction?: string): void {
     this.goToPage(direction === 'forward' ? this.currentPage() + 1 : this.currentPage() - 1);
   }
 }

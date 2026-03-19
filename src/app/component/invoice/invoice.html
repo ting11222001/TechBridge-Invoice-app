@@ -1,1 +1,133 @@
-<p>invoice works!</p>
+@if (invoiceState$ | async; as state) {
+  <ng-container [ngSwitch]="state.dataState">
+    <ng-container *ngSwitchCase="DataState.LOADED">
+      <app-navbar [user]="state?.appData?.data?.user"></app-navbar>
+
+      <section class="invoice-section">
+        <div class="container">
+
+          <nav aria-label="breadcrumb" style="margin-bottom:16px;">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a [routerLink]="['/']">Home</a></li>
+              <li class="breadcrumb-item"><a [routerLink]="['/invoices']">Invoices</a></li>
+              <li class="breadcrumb-item active" aria-current="page">
+                {{ state?.appData?.data?.invoice?.invoiceNumber }}
+              </li>
+            </ol>
+          </nav>
+
+          <div class="invoice-actions">
+            <button (click)="exportAsPDF()" class="btn btn-sm" style="background:#ea0c4b;color:#fff;font-weight:600;display:flex;align-items:center;gap:6px;">
+              <i class="bi bi-file-earmark-pdf-fill"></i> Export as PDF
+            </button>
+          </div>
+
+          <div id="invoice">
+
+            <div class="invoice-header-bar">
+              <div>
+                <div class="invoice-logo-name">TechBridge</div>
+                <div class="invoice-logo-sub">Invoice Management System</div>
+              </div>
+              <div class="invoice-title">
+                <div class="invoice-title-text">INVOICE</div>
+                <div class="invoice-title-number">#{{ state?.appData?.data?.invoice?.invoiceNumber }}</div>
+              </div>
+            </div>
+
+            <div class="invoice-divider"></div>
+
+            <div class="invoice-parties">
+              <div>
+                <div class="invoice-party-label">From</div>
+                <div class="invoice-party-name">TechBridge, Inc.</div>
+                <div class="invoice-party-details">
+                  123 King William Road<br>
+                  Adelaide, SA 5000<br>
+                  Phone: (123) 456-7890<br>
+                  billing&#64;techbridge.com
+                </div>
+              </div>
+
+              <div>
+                <div class="invoice-party-label">Bill To</div>
+                <div class="invoice-party-name">{{ state?.appData?.data?.customer?.name }}</div>
+                <div class="invoice-party-details">
+                  {{ state?.appData?.data?.customer?.address }}<br>
+                  {{ state?.appData?.data?.customer?.email }}<br>
+                  {{ state?.appData?.data?.customer?.phone }}
+                </div>
+              </div>
+
+              <div>
+                <div class="invoice-party-label">Details</div>
+                <div class="invoice-party-details">
+                  <div>
+                    <span class="invoice-detail-key">Invoice Date:</span><br>
+                    {{ state?.appData?.data?.invoice?.date | date:'mediumDate' }}
+                  </div>
+                  <div style="margin-top:8px;">
+                    <span class="invoice-detail-key">Due Date:</span><br>
+                    30 days from invoice date
+                  </div>
+                  <div style="margin-top:8px;">
+                    <span class="invoice-detail-key">Status:</span><br>
+                    <span class="invoice-status-badge">{{ state?.appData?.data?.invoice?.status }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <table class="invoice-table">
+              <thead>
+                <tr>
+                  <th style="width:20%">#</th>
+                  <th style="width:80%">Service Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (service of state?.appData?.data?.invoice?.services?.split(','); track $index) {
+                  <tr>
+                    <td>{{ state?.appData?.data?.invoice?.invoiceNumber }}</td>
+                    <td>{{ service }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+
+            <div class="invoice-totals">
+              <div class="invoice-totals-box">
+                <div class="invoice-totals-row">
+                  <span>Subtotal</span>
+                  <span>${{ state?.appData?.data?.invoice?.total }}</span>
+                </div>
+                <div class="invoice-totals-row">
+                  <span>Tax (10%)</span>
+                  <span>${{ (state?.appData?.data?.invoice?.total ?? 0) * 0.1 | number:'.2-2' }}</span>
+                </div>
+                <div class="invoice-total-due">
+                  <span class="invoice-total-due-label">Total Due</span>
+                  <span class="invoice-total-due-amount">
+                    ${{ (state?.appData?.data?.invoice?.total ?? 0) * 1.1 | number:'.2-2' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="invoice-footer">
+              <div class="invoice-footer-heading">THANK YOU FOR YOUR BUSINESS</div>
+              <div class="invoice-footer-links">
+                <span>techBridge.com</span>
+                <span>(123) 456-7890</span>
+                <span>billing&#64;techBridge.com</span>
+              </div>
+            </div>
+
+          </div><!-- /#invoice -->
+
+        </div>
+      </section>
+
+    </ng-container>
+  </ng-container>
+}
