@@ -65,8 +65,8 @@ export class InvoiceComponent implements OnInit {
 
     pdf.html(element, {
       margin: 5,
-      width: 200,
-      windowWidth: element.scrollWidth, // Use the full width of the element for better resolution
+      width: 200,                       // 210 (A4 width in mm) - 5 (left margin) - 5 (right margin); tells jsPDF "fit whatever canvas you got into 200mm on the page". jsPDF will scale the canvas up or down to hit width: 200mm regardless of what the canvas pixel width is.
+      windowWidth: element.scrollWidth, // tells html2canvas "pretend the viewport is this wide when taking the screenshot"
       autoPaging: false,
       callback: (doc) => doc.save(fileName),
     });
