@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { User } from '../../interface/user';
 import { UserService } from '../../service/user';
@@ -9,8 +9,8 @@ import { UserService } from '../../service/user';
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
-export class NavbarComponent {
-  @Input() user: User | undefined;
+export class NavbarComponent implements OnInit {
+  user: User | undefined;
 
   customersOpen = false;
   invoicesOpen = false;
@@ -18,6 +18,17 @@ export class NavbarComponent {
   mobileOpen = false;
 
   constructor(private router: Router, private userService: UserService) {}
+
+  ngOnInit(): void {
+    this.userService.profile$().subscribe({
+      next: (response) => {
+        this.user = response.data?.user;
+      },
+      error: (error) => {
+        console.error('Error fetching user profile:', error);
+      }
+    });
+  }
 
   logOut(): void {
     this.userService.logOut$();
