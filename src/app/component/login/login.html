@@ -1,194 +1,161 @@
 @if (loginState$ | async; as state) {
-  <section>
+  <section class="min-h-screen bg-gray-900">
+
     @if (!state.loginSuccess && !state.isUsingMfa) {
-      <div class="container">
-        <div class="row justify-content-center my-5">
-          <div class="col-md-6">
-            <div class="card">
-              <div class="card-body">
+      <div class="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8">
 
-                <!-- Login Form -->
-                <div class="text-center">
-                  <h2>
-                    <i style="margin-right: 5px;" class="bi bi-safe"></i>
-                    TechBridge-Invoice
-                  </h2>
-                </div>
+        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+          <h2 class="text-center text-2xl font-bold tracking-tight text-white">
+            <i class="bi bi-safe mr-2"></i>
+            TechBridge-Invoice
+          </h2>
+        </div>
 
-                @if (state.dataState === DataState.ERROR) {
-                  <div class="alert alert-danger bg-danger text-light border-0 alert-dismissible fade show" role="alert">
-                    {{ state.error }}
-                    <button type="button"
-                            class="btn-close btn-close-white"
-                            data-bs-dismiss="alert"
-                            aria-label="Close">
-                    </button>
-                  </div>
-                }
+        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
 
-                <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
-                  <div class="form-outline mb-4">
-                    <label class="form-label" for="email">Email Address</label>
-                    <input ngModel
-                          name="email"
-                          [disabled]="state.dataState === DataState.LOADING"  
-                          type="email"
-                          class="form-control"
-                          required>
-                  </div>
+          @if (state.dataState === DataState.ERROR) {
+            <div class="mb-6 flex items-start justify-between rounded-md border border-red-500 bg-red-500/20 px-4 py-3 text-red-400" role="alert">
+              <span>{{ state.error }}</span>
+              <button type="button" class="ml-4 hover:text-red-300" data-bs-dismiss="alert" aria-label="Close">✕</button>
+            </div>
+          }
 
-                  <div class="form-outline mb-4">
-                    <label for="password" class="form-label">Password</label>
-                    <input ngModel
-                          name="password"
-                          [disabled]="state.dataState === DataState.LOADING" 
-                          type="password"
-                          class="form-control"
-                          required>
-                  </div>
-
-                 <div class="d-flex justify-content-center mb-2">
-                    <button type="button"
-                     class="btn btn-outline-secondary" 
-                     (click)="fillDemoCredentials(loginForm)">
-                      Demo Login
-                    </button>
-                  </div>
-                  
-                  <div class="d-flex justify-content-center mb-4">
-                    <button 
-                      type="submit" 
-                      [disabled]="state.dataState === DataState.LOADING ||
-                      loginForm.invalid ||
-                      loginForm.pristine"
-                      class="btn btn btn-primary">
-                      @if (state.dataState === DataState.LOADING) {
-                        <span
-                          class="spinner-border spinner-border-sm"
-                          role="status"
-                          aria-hidden="true"
-                          style="margin-right: 5px;">
-                        </span>
-                      }
-
-                      @if (state.dataState === DataState.LOADING) {
-                        <span>Loading...</span>
-                      } @else {
-                        <span>Log in</span>
-                      }
-                    </button>
-                  </div>
-                </form>
-
-                <div class="row mb-4">
-                  <div class="col d-flex justify-content-center">
-                    <a [ngStyle]="{'pointer-events': state.dataState === DataState.LOADING ? 'none': ''}" routerLink="/register">Create an Account</a>
-                  </div>
-                  <div class="col">
-                    <a [ngStyle]="{'pointer-events': state.dataState === DataState.LOADING ? 'none': ''}" routerLink="/resetpassword">Forgot password?</a>
-                  </div>
-                </div>
-
+          <form #loginForm="ngForm" (ngSubmit)="login(loginForm)" class="space-y-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-100" for="email">Email Address</label>
+              <div class="mt-2">
+                <input ngModel
+                       name="email"
+                       [disabled]="state.dataState === DataState.LOADING"
+                       type="email"
+                       class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                       required>
               </div>
             </div>
+
+            <div>
+              <label for="password" class="block text-sm font-medium text-gray-100">Password</label>
+              <div class="mt-2">
+                <input ngModel
+                       name="password"
+                       [disabled]="state.dataState === DataState.LOADING"
+                       type="password"
+                       class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                       required>
+              </div>
+            </div>
+
+            <div class="flex justify-center">
+              <button type="button"
+                      class="rounded-md border border-gray-600 px-4 py-1.5 text-sm font-semibold text-gray-300 hover:bg-gray-700"
+                      (click)="fillDemoCredentials(loginForm)">
+                Demo Login
+              </button>
+            </div>
+
+            <div>
+              <button type="submit"
+                      [disabled]="state.dataState === DataState.LOADING || loginForm.invalid || loginForm.pristine"
+                      class="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-50">
+                @if (state.dataState === DataState.LOADING) {
+                  <span class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                }
+                @if (state.dataState === DataState.LOADING) {
+                  <span>Loading...</span>
+                } @else {
+                  <span>Log in</span>
+                }
+              </button>
+            </div>
+          </form>
+
+          <div class="mt-6 flex justify-between text-sm">
+            <a [ngStyle]="{'pointer-events': state.dataState === DataState.LOADING ? 'none' : ''}"
+               routerLink="/register"
+               class="font-semibold text-indigo-400 hover:text-indigo-300">
+              Create an Account
+            </a>
+            <a [ngStyle]="{'pointer-events': state.dataState === DataState.LOADING ? 'none' : ''}"
+               routerLink="/resetpassword"
+               class="font-semibold text-indigo-400 hover:text-indigo-300">
+              Forgot password?
+            </a>
           </div>
+
         </div>
       </div>
     }
 
-    <!-- Success screen -->
-     @if (state.isUsingMfa) {
-      <div class="container">
-        <div class="row justify-content-center my-5">
-          <div class="col-md-6" style="margin-top: 50px;">
-            <div class="card">
-              <div class="card-body">
+    <!-- MFA screen -->
+    @if (state.isUsingMfa) {
+      <div class="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8">
 
-                <div class="text-center">
-                  <h2>
-                    <i style="margin-right: 5px;" class="bi bi-safe"></i>
-                    TechBridge-Invoice
-                  </h2>
+        <div class="sm:mx-auto sm:w-full sm:max-w-sm text-center">
+          <h2 class="text-2xl font-bold tracking-tight text-white">
+            <i class="bi bi-safe mr-2"></i>
+            TechBridge-Invoice
+          </h2>
+          <p class="mt-4 mb-2 text-base font-semibold text-gray-100">
+            Verification Code Sent To ... {{ phone().substring(phone().length - 4) }}
+          </p>
+          <i class="bi bi-check-circle-fill text-3xl text-green-500"></i>
+          <p class="mt-2 text-lg text-gray-300">
+            Please access your SMS and enter the code.
+          </p>
+        </div>
 
-                  <h5 class="card-title mt-4 mb-4">
-                    Verification Code Sent To ... {{ phone().substring(phone().length - 4) }}
-                  </h5>
+        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
 
-                  <i class="bi bi-check-circle-fill"
-                    style="font-size: 30px; color: green;">
-                  </i>
+          @if (state.dataState === DataState.ERROR) {
+            <div class="mb-6 flex items-start justify-between rounded-md border border-red-500 bg-red-500/20 px-4 py-3 text-red-400" role="alert">
+              <span>{{ state.error }}</span>
+              <button type="button" class="ml-4 hover:text-red-300" data-bs-dismiss="alert" aria-label="Close">✕</button>
+            </div>
+          }
 
-                  <p class="mt-2" style="font-size: 20px;">
-                    Please access your SMS and enter the code.
-                  </p>
-                </div>
-
-                @if (state.dataState === DataState.ERROR) {
-                  <div class="alert alert-danger bg-danger text-light border-0 alert-dismissible fade show" role="alert">
-                    {{ state.error }}
-                    <button type="button"
-                            class="btn-close btn-close-white"
-                            data-bs-dismiss="alert"
-                            aria-label="Close">
-                    </button>
-                  </div>
-                }
-
-                <form #verifyCodeForm="ngForm" (ngSubmit)="verifyCode(verifyCodeForm)">
-                  <div class="form-outline mb-4">
-                    <label class="form-label" for="code">
-                      Verification Code
-                    </label>
-                    <input ngModel
-                          [disabled]="state.dataState === DataState.LOADING" 
-                          type="text"
-                          name="code"
-                          class="form-control"
-                          required>
-                  </div>
-
-                  <div class="d-flex justify-content-center mb-4">
-                    <button 
-                            type="submit" 
-                            [disabled]="state.dataState === DataState.LOADING ||
-                            verifyCodeForm.invalid ||
-                            verifyCodeForm.pristine"
-                            class="btn btn-primary">
-                      @if(state.dataState === DataState.LOADING) {
-                        <span
-                              class="spinner-border spinner-border-sm"
-                              role="status"
-                              aria-hidden="true"
-                              style="margin-right: 5px;">
-                        </span>
-                      }
-                      @if (state.dataState === DataState.LOADING) {
-                        <span>Loading...</span>
-                      } @else {
-                        <span>Verify Code</span>
-                      }
-                    </button>
-                  </div>
-                </form>
-
-                <div class="row mb-4">
-                  <div class="col d-flex justify-content-center">
-                    <a (click)="loginPage()" style="color: #0D6EFD; text-decoration: underline; cursor: pointer;">
-                      Account Login
-                    </a>
-                  </div>
-                  <div class="col">
-                    <a routerLink="/register" style="color: #0D6EFD; text-decoration: underline; cursor: pointer;">
-                      Create an account
-                    </a>
-                  </div>
-                </div>
-
+          <form #verifyCodeForm="ngForm" (ngSubmit)="verifyCode(verifyCodeForm)" class="space-y-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-100" for="code">
+                Verification Code
+              </label>
+              <div class="mt-2">
+                <input ngModel
+                       [disabled]="state.dataState === DataState.LOADING"
+                       type="text"
+                       name="code"
+                       class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                       required>
               </div>
             </div>
+
+            <div>
+              <button type="submit"
+                      [disabled]="state.dataState === DataState.LOADING || verifyCodeForm.invalid || verifyCodeForm.pristine"
+                      class="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-50">
+                @if (state.dataState === DataState.LOADING) {
+                  <span class="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                }
+                @if (state.dataState === DataState.LOADING) {
+                  <span>Loading...</span>
+                } @else {
+                  <span>Verify Code</span>
+                }
+              </button>
+            </div>
+          </form>
+
+          <div class="mt-6 flex justify-between text-sm">
+            <a (click)="loginPage()" class="cursor-pointer font-semibold text-indigo-400 hover:text-indigo-300">
+              Account Login
+            </a>
+            <a routerLink="/register" class="font-semibold text-indigo-400 hover:text-indigo-300">
+              Create an account
+            </a>
           </div>
+
         </div>
       </div>
     }
+
   </section>
 }
