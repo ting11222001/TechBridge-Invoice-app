@@ -12,8 +12,12 @@ import { NewInvoiceComponent } from './component/newinvoice/newinvoice';
 import { InvoicesComponent } from './component/invoices/invoices';
 import { InvoiceComponent } from './component/invoice/invoice';
 import { CustomerComponent } from './component/customer/customer';
+import { ShellComponent } from './shell/shell';
 
 export const routes: Routes = [
+    { path: '', component: ShellComponent, children: [
+        { path: '', component: HomeComponent, canActivate: [authenticationGuard] }
+    ]},
     { path: 'login', component: LoginComponent},
     { path: 'register', component: RegisterComponent},
     { path: 'resetpassword', component: ResetpasswordComponent},
@@ -26,7 +30,7 @@ export const routes: Routes = [
     { path: 'invoices', component: InvoicesComponent, canActivate: [authenticationGuard] },
     { path: 'customers/:id', component: CustomerComponent, canActivate: [authenticationGuard] },
     { path: 'invoices/:id/:invoiceNumber', component: InvoiceComponent, canActivate: [authenticationGuard] },
-    { path: '', component: HomeComponent, canActivate: [authenticationGuard]},
+    // { path: '', component: HomeComponent, canActivate: [authenticationGuard]},
     { path: '', redirectTo: '/', pathMatch: 'full'},
     { path: '**', component: HomeComponent}, // If enter some non existing routes, go to the Login page
 ];
