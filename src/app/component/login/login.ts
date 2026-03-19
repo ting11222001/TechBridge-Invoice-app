@@ -107,4 +107,12 @@ export class LoginComponent implements OnInit {
   loginPage(): void {
     this.loginState$ = of({ dataState: DataState.LOADED });
   }
+
+  fillDemoCredentials(logingForm: NgForm): void {
+    logingForm.form.patchValue({
+      email: 'tiffany@gmail.com',
+      password: '123456'
+    });
+    logingForm.form.markAsDirty();
+  }
 }
