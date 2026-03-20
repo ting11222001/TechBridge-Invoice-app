@@ -1,138 +1,121 @@
 @if (newInvoiceState$ | async; as state) {
-  <ng-container [ngSwitch]="state.dataState">
-    <ng-container *ngSwitchCase="DataState.LOADED">
-      <section>
-        <div class="container">
-          <nav aria-label="breadcrumb" style="margin-top: 8px">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <a [routerLink]="['/']">Home</a>
-              </li>
-              <li class="breadcrumb-item"><a [routerLink]="['/invoices']">Invoices</a></li>
-              <li class="breadcrumb-item active" aria-current="page">New</li>
-            </ol>
-          </nav>
-          <div class="row justify-content-center">
-            <div class="col-md-12">
-              <div class="card">
-                <div class="card-body">
-                  <div class="text-center">
-                    <h2><i style="margin-right: 5px" class="bi bi-receipt"></i> New Invoice</h2>
-                  </div>
-                  @if (state.error) {
-                    <div
-                      class="alert alert-danger bg-danger text-light border-0 alert-dismissible fade show"
-                      role="alert"
-                    >
-                      {{ state.error }}
-                      <button
-                        type="button"
-                        class="btn-close btn-close-white"
-                        data-bs-dismiss="alert"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                  }
-                  @if (state.appData?.message) {
-                    <div
-                      class="alert alert-success bg-success text-light border-0 alert-dismissible fade show"
-                      role="alert"
-                    >
-                      {{ state.appData?.message }}
-                      <button
-                        type="button"
-                        class="btn-close btn-close-white"
-                        data-bs-dismiss="alert"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                  }
-                  <form #invoiceForm="ngForm" (ngSubmit)="newInvoice(invoiceForm)">
-                    <div class="row">
-                      <div class="col-md-12" style="margin-bottom: 15px">
-                        <div class="form-group">
-                          <label>Services</label>
-                          <input
-                            type="text"
-                            ngModel
-                            name="services"
-                            class="form-control"
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div class="col-md-6" style="margin-bottom: 15px">
-                        <label>Customer</label>
-                        <select
-                          [ngModel]=""
-                          name="customerId"
-                          class="form-control select-cl"
-                          required
-                        >
-                          <option
-                            *ngFor="let customer of state?.appData?.data?.customers"
-                            [ngValue]="customer.id"
-                            [selected]=""
-                            [disabled]=""
-                            class="select-cl"
-                          >
-                            {{ customer.name }}
-                          </option>
-                        </select>
-                      </div>
-                      <div class="col-md-6" style="margin-bottom: 15px">
-                        <div class="form-group">
-                          <label>Total</label>
-                          <input type="total" ngModel name="total" class="form-control" required />
-                        </div>
-                      </div>
-                      <div class="col-md-6" style="margin-bottom: 15px">
-                        <div class="form-group">
-                          <label>Date</label>
-                          <input type="date" ngModel name="date" class="form-control" required />
-                        </div>
-                      </div>
-                      <div class="col-md-6" style="margin-bottom: 15px">
-                        <label>Status</label>
-                        <select name="status" ngModel="PENDING" class="form-control" required>
-                          <option value="PENDING">PENDING</option>
-                          <option value="PAID">PAID</option>
-                          <option value="CANCELED">CANCELED</option>
-                          <option value="OVERDUE">OVERDUE</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div>
-                      <button
-                        [disabled]="
-                          state.dataState === DataState.LOADING ||
-                          invoiceForm.invalid ||
-                          invoiceForm.pristine ||
-                          isLoading()
-                        "
-                        type="submit"
-                        class="btn btn-primary mt-5"
-                      >
-                        @if (isLoading()) {
-                          <span
-                            class="spinner-border spinner-border-sm"
-                            role="status"
-                            aria-hidden="true"
-                            style="margin-right: 5px"
-                          ></span>
-                          <span>Saving...</span>
-                        } @else {
-                          <span>Save Invoice</span>
-                        }
-                      </button>
-                    </div>
-                  </form>
-                </div>
+  @switch (state.dataState) {
+    @case (DataState.LOADED) {
+
+      <div class="min-h-screen bg-[#0d1117] p-8 font-sans">
+
+        <!-- Breadcrumb -->
+        <nav class="text-sm text-gray-500 mb-1">
+          <a [routerLink]="['/']" class="text-indigo-400 hover:text-indigo-300">Home</a> /
+          <a [routerLink]="['/invoices']" class="text-indigo-400 hover:text-indigo-300">Invoices</a> / New
+        </nav>
+        <h1 class="text-2xl font-semibold text-white">New Invoice</h1>
+        <p class="text-sm text-gray-500 mt-1 mb-6">Create a new invoice for a customer</p>
+
+        <!-- Error alert -->
+        @if (state.error) {
+          <div class="mb-6 flex items-start gap-3 bg-red-900/20 border border-red-500/30 text-red-400 text-sm rounded-lg px-4 py-3">
+            <svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
+            </svg>
+            <span>{{ state.error }}</span>
+          </div>
+        }
+
+        <!-- Success alert -->
+        @if (state.appData?.message) {
+          <div class="mb-6 flex items-start gap-3 bg-green-900/20 border border-green-500/30 text-green-400 text-sm rounded-lg px-4 py-3">
+            <svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>{{ state.appData?.message }}</span>
+          </div>
+        }
+
+        <div class="bg-gray-900 ring-1 ring-gray-800 rounded-xl p-8">
+
+          <form #invoiceForm="ngForm" (ngSubmit)="newInvoice(invoiceForm)">
+
+            <!-- Section: Invoice Details -->
+            <h2 class="text-sm font-semibold text-white">Invoice Details</h2>
+            <p class="text-xs text-gray-500 mt-1 mb-5">Describe the services and set the invoice amount</p>
+
+            <div class="grid grid-cols-2 gap-5">
+              <div class="col-span-2 flex flex-col gap-1.5">
+                <label class="text-sm font-medium text-gray-300">Services</label>
+                <input type="text" ngModel name="services" required
+                  placeholder="Describe the services provided"
+                  class="bg-gray-800 border border-gray-700 rounded-lg text-white text-sm px-3 py-2 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none" />
+              </div>
+              <div class="flex flex-col gap-1.5">
+                <label class="text-sm font-medium text-gray-300">Total</label>
+                <input type="number" ngModel name="total" required
+                  placeholder="0.00"
+                  class="bg-gray-800 border border-gray-700 rounded-lg text-white text-sm px-3 py-2 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none" />
+              </div>
+              <div class="flex flex-col gap-1.5">
+                <label class="text-sm font-medium text-gray-300">Date</label>
+                <input type="date" ngModel name="date" required
+                  class="bg-gray-800 border border-gray-700 rounded-lg text-white text-sm px-3 py-2 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none" />
               </div>
             </div>
-          </div>
+
+            <hr class="border-gray-800 my-7" />
+
+            <!-- Section: Assignment -->
+            <h2 class="text-sm font-semibold text-white">Assignment</h2>
+            <p class="text-xs text-gray-500 mt-1 mb-5">Link this invoice to a customer and set its status</p>
+
+            <div class="grid grid-cols-2 gap-5">
+              <div class="flex flex-col gap-1.5">
+                <label class="text-sm font-medium text-gray-300">Customer</label>
+                <select [ngModel]="" name="customerId" required
+                  class="bg-gray-800 border border-gray-700 rounded-lg text-white text-sm px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none">
+                  @for (customer of state?.appData?.data?.customers; track customer.id) {
+                    <option [ngValue]="customer.id" [selected]="" [disabled]="">{{ customer.name }}</option>
+                  }
+                </select>
+              </div>
+              <div class="flex flex-col gap-1.5">
+                <label class="text-sm font-medium text-gray-300">Status</label>
+                <select name="status" ngModel="PENDING" required
+                  class="bg-gray-800 border border-gray-700 rounded-lg text-white text-sm px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none">
+                  <option value="PENDING">Pending</option>
+                  <option value="PAID">Paid</option>
+                  <option value="CANCELED">Canceled</option>
+                  <option value="OVERDUE">Overdue</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex justify-end gap-3 mt-8">
+              <a [routerLink]="['/invoices']"
+                class="text-sm font-medium text-gray-400 border border-gray-700 rounded-lg px-4 py-2 hover:text-white hover:border-gray-500 transition cursor-pointer">
+                Cancel
+              </a>
+              <button type="submit"
+                [disabled]="invoiceForm.invalid || invoiceForm.pristine || isLoading()"
+                class="flex items-center gap-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg px-5 py-2 transition">
+                @if (isLoading()) {
+                  <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                  </svg>
+                  <span>Saving...</span>
+                } @else {
+                  <span>Save Invoice</span>
+                }
+              </button>
+            </div>
+
+          </form>
         </div>
-      </section>
-    </ng-container>
-  </ng-container>
+      </div>
+
+    }
+  }
 }
