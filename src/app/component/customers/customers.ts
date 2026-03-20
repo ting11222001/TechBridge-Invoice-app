@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { NavbarComponent } from '../navbar/navbar';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -12,7 +11,7 @@ import { Customer } from '../../interface/customer';
 
 @Component({
   selector: 'app-customers',
-  imports: [FormsModule, CommonModule, RouterModule, NavbarComponent],
+  imports: [FormsModule, CommonModule, RouterModule],
   templateUrl: './customers.html',
   styleUrl: './customers.css',
 })
