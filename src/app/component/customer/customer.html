@@ -1,287 +1,244 @@
 @if (customerState$ | async; as state) {
   <ng-container [ngSwitch]="state.dataState">
     <ng-container *ngSwitchCase="DataState.LOADED">
-      <section>
-        <div class="container">
-          <nav aria-label="breadcrumb" style="margin-top: 8px">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a [routerLink]="['/']">Home</a></li>
-              <li class="breadcrumb-item"><a [routerLink]="['/customers']">Customers</a></li>
-              <li class="breadcrumb-item active" aria-current="page">
-                {{ state?.appData?.data?.customer?.name }}
-              </li>
-            </ol>
-          </nav>
-          <div class="row">
-            <div class="col-xl-4">
-              <div class="card">
-                <div class="card-body">
-                  <div class="d-flex align-items-start">
-                    <img
-                      [src]="state?.appData?.data?.customer?.imageUrl"
-                      style="position: relative"
-                      class="rounded-circle avatar-lg img-thumbnail"
-                      alt="profile-image"
-                    />
-                    <div class="w-100 ms-4">
-                      <h4 class="my-0">{{ state?.appData?.data?.customer?.name }}</h4>
-                      <p class="" style="font-size: 13px">
-                        {{ state?.appData?.data?.customer?.email }}
-                      </p>
-                      <span
-                        class="badge"
-                        style="
-                          position: absolute;
-                          bottom: 60px;
-                          left: 113px;
-                          top: 70px;
-                          font-size: 11px;
-                          height: 18px;
-                        "
-                        [ngClass]="[
-                          state?.appData?.data?.customer?.status === 'ACTIVE' ? ' bg-success' : '',
-                          state?.appData?.data?.customer?.status === 'PENDING' ? ' bg-primary' : '',
-                          state?.appData?.data?.customer?.status === 'BANNED' ? ' bg-danger' : '',
-                          state?.appData?.data?.customer?.status === 'INACTIVE' ? ' bg-info' : '',
-                        ]"
-                      >
-                        {{ state?.appData?.data?.customer?.status }}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Total Invoices</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Customer Total Invoices</h6>
-                  <ul class="list-group">
-                    <li
-                      class="list-group-item d-flex justify-content-between align-items-center"
-                      style="font-size: 20px"
-                    >
-                      Total Current Invoices
-                      <span class="" style="font-size: 20px">
-                        {{ state?.appData?.data?.customer?.invoices?.length }}
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Total Billed</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Customer Total Billed</h6>
-                  <ul class="list-group">
-                    <li
-                      class="list-group-item d-flex justify-content-between align-items-center"
-                      style="font-size: 20px"
-                    >
-                      Total Billed
-                      <span class="badge bg-success" style="font-size: 20px">
-                        $ {{ state?.appData?.data?.customer?.invoices?.length }}
-                      </span>
-                    </li>
-                  </ul>
+      <section class="min-h-screen bg-[#0d1117] text-gray-50 px-6 py-6">
+
+        <!-- Breadcrumb -->
+        <nav class="mb-6 text-sm text-gray-500">
+          <ol class="flex items-center gap-2">
+            <li><a [routerLink]="['/']" class="text-indigo-400 hover:text-indigo-300">Home</a></li>
+            <li class="text-gray-600">/</li>
+            <li><a [routerLink]="['/customers']" class="text-indigo-400 hover:text-indigo-300">Customers</a></li>
+            <li class="text-gray-600">/</li>
+            <li class="text-gray-400">{{ state?.appData?.data?.customer?.name }}</li>
+          </ol>
+        </nav>
+
+        <!-- Top grid: left panel + profile form -->
+        <div class="grid grid-cols-1 xl:grid-cols-[280px_1fr] gap-5 mb-5">
+
+          <!-- Left panel -->
+          <div class="flex flex-col gap-5">
+
+            <!-- Avatar card -->
+            <div class="bg-gray-900 rounded-lg ring-1 ring-gray-800 p-5">
+              <div class="flex items-center gap-4">
+                <img
+                  [src]="state?.appData?.data?.customer?.imageUrl"
+                  class="w-16 h-16 rounded-full object-cover ring-1 ring-gray-700"
+                  alt="profile-image"
+                />
+                <div>
+                  <h4 class="text-white font-semibold text-base">
+                    {{ state?.appData?.data?.customer?.name }}
+                  </h4>
+                  <p class="text-gray-400 text-sm mt-0.5">
+                    {{ state?.appData?.data?.customer?.email }}
+                  </p>
+                  <span class="mt-1.5 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ring-1"
+                    [ngClass]="{
+                      'bg-green-900/30 text-green-400 ring-green-500/30':   state?.appData?.data?.customer?.status === 'ACTIVE',
+                      'bg-yellow-900/30 text-yellow-400 ring-yellow-500/30': state?.appData?.data?.customer?.status === 'PENDING',
+                      'bg-red-900/30 text-red-400 ring-red-500/30':         state?.appData?.data?.customer?.status === 'BANNED',
+                      'bg-blue-900/30 text-blue-400 ring-blue-500/30':      state?.appData?.data?.customer?.status === 'INACTIVE'
+                    }">
+                    {{ state?.appData?.data?.customer?.status }}
+                  </span>
                 </div>
               </div>
             </div>
-            <div class="col-xl-8">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Profile Details</h5>
-                  <form #customerForm="ngForm" (ngSubmit)="updateCustomer(customerForm)">
-                    <input
-                      type="hidden"
-                      [ngModel]="state?.appData?.data?.customer?.id"
-                      name="id"
-                      [disabled]="
-                        state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()
-                      "
-                    />
-                    <input
-                      type="hidden"
-                      [ngModel]="state?.appData?.data?.customer?.createdAt"
-                      name="createdAt"
-                      [disabled]="
-                        state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()
-                      "
-                    />
-                    <div class="row mb-3">
-                      <label for="name" class="col-sm-3 col-form-label">First Name</label>
-                      <div class="col-sm-9">
-                        <input
-                          type="text"
-                          [ngModel]="state?.appData?.data?.customer?.name"
-                          name="name"
-                          [disabled]="
-                            state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()
-                          "
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label for="email" class="col-sm-3 col-form-label">Email</label>
-                      <div class="col-sm-9">
-                        <input
-                          type="text"
-                          [ngModel]="state?.appData?.data?.customer?.email"
-                          name="email"
-                          [disabled]="
-                            state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()
-                          "
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label for="type" class="col-sm-3 col-form-label">Type</label>
-                      <div class="col-sm-9">
-                        <input
-                          type="text"
-                          [ngModel]="state?.appData?.data?.customer?.type"
-                          name="type"
-                          [disabled]="
-                            state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()
-                          "
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label for="status" class="col-sm-3 col-form-label">Status</label>
-                      <div class="col-sm-9">
-                        <input
-                          type="text"
-                          [ngModel]="state?.appData?.data?.customer?.status"
-                          name="status"
-                          [disabled]="
-                            state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()
-                          "
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label for="address" class="col-sm-3 col-form-label">Address</label>
-                      <div class="col-sm-9">
-                        <input
-                          type="text"
-                          [ngModel]="state?.appData?.data?.customer?.address"
-                          name="address"
-                          [disabled]="
-                            state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()
-                          "
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label for="phone" class="col-sm-3 col-form-label">Phone</label>
-                      <div class="col-sm-9">
-                        <input
-                          type="text"
-                          [ngModel]="state?.appData?.data?.customer?.phone"
-                          name="phone"
-                          [disabled]="
-                            state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()
-                          "
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <label for="imageurl" class="col-sm-3 col-form-label">Image URL</label>
-                      <div class="col-sm-9">
-                        <input
-                          type="text"
-                          [ngModel]="state?.appData?.data?.customer?.imageUrl"
-                          name="imageUrl"
-                          [disabled]="
-                            state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()
-                          "
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <button
-                      [disabled]="
-                        state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()
-                      "
-                      type="submit"
-                      class="btn btn-primary float-end"
-                    >
-                      @if (isLoading()) {
-                        <span
-                          class="spinner-border spinner-border-sm"
-                          role="status"
-                          aria-hidden="true"
-                          style="margin-right: 5px"
-                        ></span>
-                        <span>Loading...</span>
-                      } @else {
-                        <span>Update</span>
-                      }
-                    </button>
-                  </form>
-                </div>
+
+            <!-- Total Invoices card -->
+            <div class="bg-gray-900 rounded-lg ring-1 ring-gray-800 p-5">
+              <p class="text-xs text-gray-500 uppercase tracking-wider mb-0.5">Total Invoices</p>
+              <p class="text-sm text-gray-400 mb-4">Customer Total Invoices</p>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-300">Total Current Invoices</span>
+                <span class="text-white font-semibold">
+                  {{ state?.appData?.data?.customer?.invoices?.length }}
+                </span>
               </div>
             </div>
+
+            <!-- Total Billed card -->
+            <div class="bg-gray-900 rounded-lg ring-1 ring-gray-800 p-5">
+              <p class="text-xs text-gray-500 uppercase tracking-wider mb-0.5">Total Billed</p>
+              <p class="text-sm text-gray-400 mb-4">Customer Total Billed</p>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-300">Total Billed</span>
+                <span class="bg-green-900/30 text-green-400 ring-1 ring-green-500/30 rounded-full px-3 py-0.5 text-sm font-semibold">
+                  ${{ state?.appData?.data?.customer?.invoices?.length }}
+                </span>
+              </div>
+            </div>
+
           </div>
-          <div class="row">
-            <div class="col-xl-12">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Invoices</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Customer Invoices</h6>
-                  <table class="table table-hover">
-                    <thead class="table-dark">
-                      <tr>
-                        <th scope="col">Invoice Number</th>
-                        <th scope="col">Service</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Total</th>
-                        <th scope="col">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let invoice of state?.appData?.data?.customer?.invoices">
-                        <td>{{ invoice.invoiceNumber }}</td>
-                        <td>{{ invoice.services }}</td>
-                        <td>
-                          <span
-                            class="badge"
-                            [ngClass]="[
-                              invoice.status === 'PAID' ? ' bg-success' : '',
-                              invoice.status === 'PENDING' ? ' bg-primary' : '',
-                              invoice.status === 'OVERDUE' ? ' bg-warning' : '',
-                              invoice.status === 'CANCELED' ? ' bg-danger' : '',
-                            ]"
-                          >
-                            {{ invoice.status }}
-                          </span>
-                        </td>
-                        <td>{{ invoice.date | date: 'mediumDate' }}</td>
-                        <td>${{ invoice.total }}</td>
-                        <td>
-                          <button
-                            type="button"
-                            [routerLink]="['/invoices', invoice.id, invoice.invoiceNumber]"
-                            class="btn btn-info btn-sm"
-                          >
-                            Print
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+
+          <!-- Profile Details form -->
+          <div class="bg-gray-900 rounded-lg ring-1 ring-gray-800 p-6">
+            <h5 class="text-white font-semibold text-base mb-1">Profile Details</h5>
+            <p class="text-sm text-gray-500 mb-6">Customer information and details.</p>
+
+            <form #customerForm="ngForm" (ngSubmit)="updateCustomer(customerForm)">
+              <input type="hidden" [ngModel]="state?.appData?.data?.customer?.id" name="id" />
+              <input type="hidden" [ngModel]="state?.appData?.data?.customer?.createdAt" name="createdAt" />
+
+              <div class="divide-y divide-gray-800">
+
+                <div class="grid grid-cols-[160px_1fr] items-center gap-4 py-4">
+                  <label class="text-sm font-medium text-gray-100">First Name</label>
+                  <input
+                    type="text"
+                    [ngModel]="state?.appData?.data?.customer?.name"
+                    name="name"
+                    [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  />
                 </div>
+
+                <div class="grid grid-cols-[160px_1fr] items-center gap-4 py-4">
+                  <label class="text-sm font-medium text-gray-100">Email</label>
+                  <input
+                    type="text"
+                    [ngModel]="state?.appData?.data?.customer?.email"
+                    name="email"
+                    [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  />
+                </div>
+
+                <div class="grid grid-cols-[160px_1fr] items-center gap-4 py-4">
+                  <label class="text-sm font-medium text-gray-100">Type</label>
+                  <input
+                    type="text"
+                    [ngModel]="state?.appData?.data?.customer?.type"
+                    name="type"
+                    [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  />
+                </div>
+
+                <div class="grid grid-cols-[160px_1fr] items-center gap-4 py-4">
+                  <label class="text-sm font-medium text-gray-100">Status</label>
+                  <input
+                    type="text"
+                    [ngModel]="state?.appData?.data?.customer?.status"
+                    name="status"
+                    [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  />
+                </div>
+
+                <div class="grid grid-cols-[160px_1fr] items-center gap-4 py-4">
+                  <label class="text-sm font-medium text-gray-100">Address</label>
+                  <input
+                    type="text"
+                    [ngModel]="state?.appData?.data?.customer?.address"
+                    name="address"
+                    [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  />
+                </div>
+
+                <div class="grid grid-cols-[160px_1fr] items-center gap-4 py-4">
+                  <label class="text-sm font-medium text-gray-100">Phone</label>
+                  <input
+                    type="text"
+                    [ngModel]="state?.appData?.data?.customer?.phone"
+                    name="phone"
+                    [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  />
+                </div>
+
+                <div class="grid grid-cols-[160px_1fr] items-center gap-4 py-4">
+                  <label class="text-sm font-medium text-gray-100">Image URL</label>
+                  <input
+                    type="text"
+                    [ngModel]="state?.appData?.data?.customer?.imageUrl"
+                    name="imageUrl"
+                    [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()"
+                    class="w-full bg-gray-800 border border-gray-700 rounded-md px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  />
+                </div>
+
               </div>
-            </div>
+
+              <div class="flex justify-end mt-6">
+                <button
+                  type="submit"
+                  [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()"
+                  class="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-md px-4 py-2 text-sm font-semibold flex items-center gap-2 transition-colors"
+                >
+                  @if (isLoading()) {
+                    <svg class="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                    </svg>
+                    Loading...
+                  } @else {
+                    Update
+                  }
+                </button>
+              </div>
+            </form>
           </div>
         </div>
+
+        <!-- Invoices table -->
+        <div class="bg-gray-900 rounded-lg ring-1 ring-gray-800 overflow-hidden">
+          <div class="px-6 py-4 border-b border-gray-800">
+            <h5 class="text-white font-semibold text-base">Invoices</h5>
+            <p class="text-sm text-gray-500 mt-0.5">Customer Invoices</p>
+          </div>
+          <table class="w-full">
+            <thead>
+              <tr class="bg-gray-800/50">
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Invoice Number</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Service</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Date</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Total</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-800">
+              @for (invoice of state?.appData?.data?.customer?.invoices; track invoice.id) {
+                <tr class="hover:bg-gray-800/50 transition-colors">
+                  <td class="px-6 py-4 text-sm text-gray-100">{{ invoice.invoiceNumber }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-400">{{ invoice.services }}</td>
+                  <td class="px-6 py-4">
+                    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ring-1"
+                      [ngClass]="{
+                        'bg-green-900/30 text-green-400 ring-green-500/30':   invoice.status === 'PAID',
+                        'bg-indigo-900/30 text-indigo-400 ring-indigo-500/30': invoice.status === 'PENDING',
+                        'bg-yellow-900/30 text-yellow-400 ring-yellow-500/30': invoice.status === 'OVERDUE',
+                        'bg-red-900/30 text-red-400 ring-red-500/30':         invoice.status === 'CANCELED'
+                      }">
+                      {{ invoice.status }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-400">{{ invoice.date | date: 'mediumDate' }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-100">${{ invoice.total }}</td>
+                  <td class="px-6 py-4">
+                    <button
+                      type="button"
+                      [routerLink]="['/invoices', invoice.id, invoice.invoiceNumber]"
+                      class="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition-colors"
+                    >
+                      Print
+                    </button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="6" class="px-6 py-10 text-center text-sm text-gray-500">No invoices found.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
       </section>
     </ng-container>
   </ng-container>
