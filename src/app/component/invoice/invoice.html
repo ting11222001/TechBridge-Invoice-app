@@ -1,131 +1,154 @@
 @if (invoiceState$ | async; as state) {
-  <ng-container [ngSwitch]="state.dataState">
-    <ng-container *ngSwitchCase="DataState.LOADED">
-      <section class="invoice-section">
-        <div class="container">
+  @switch (state.dataState) {
+    @case (DataState.LOADED) {
+      
+      <div class="min-h-screen">
+        <div class="mx-auto max-w-4xl">
 
-          <nav aria-label="breadcrumb" style="margin-bottom:16px;">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a [routerLink]="['/']">Home</a></li>
-              <li class="breadcrumb-item"><a [routerLink]="['/invoices']">Invoices</a></li>
-              <li class="breadcrumb-item active" aria-current="page">
-                {{ state?.appData?.data?.invoice?.invoiceNumber }}
-              </li>
-            </ol>
+          <!-- breadcrumb -->
+          <nav class="mb-6 text-sm text-gray-500">
+            <a [routerLink]="['/']" class="text-indigo-400 hover:text-indigo-300">Home</a>
+            <span class="text-gray-600">/</span>
+            <a [routerLink]="['/invoices']" class="text-indigo-400 hover:text-indigo-300">Invoices</a>
+            <span class="text-gray-600">/</span>
+            <span class="text-gray-400">{{ state?.appData?.data?.invoice?.invoiceNumber }}</span>
           </nav>
 
-          <div class="invoice-actions">
-            <button (click)="exportAsPDF()" class="btn btn-sm" style="background:#ea0c4b;color:#fff;font-weight:600;display:flex;align-items:center;gap:6px;">
-              <i class="bi bi-file-earmark-pdf-fill"></i> Export as PDF
+          <!-- page header -->
+          <div class="mb-6 flex items-center justify-between">
+            <div>
+              <h1 class="text-xl font-semibold text-white">
+                Invoice #{{ state?.appData?.data?.invoice?.invoiceNumber }}
+              </h1>
+              <p class="mt-1 text-sm text-gray-400">
+                {{ state?.appData?.data?.invoice?.date | date:'mediumDate' }}
+              </p>
+            </div>
+            <button
+              (click)="exportAsPDF()"
+              class="flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-indigo-500">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Export as PDF
             </button>
           </div>
 
-          <div id="invoice">
+          <!-- invoice card (white bg for clean PDF output) -->
+          <div id="invoicePDF" class="rounded-lg bg-white p-8 ring-1 ring-gray-200">
 
-            <div class="invoice-header-bar">
+            <!-- invoice header -->
+            <div class="flex items-start justify-between border-b border-gray-200 pb-6">
               <div>
-                <div class="invoice-logo-name">TechBridge</div>
-                <div class="invoice-logo-sub">Invoice Management System</div>
+                <p class="text-xl font-bold text-gray-900">TechBridge</p>
+                <p class="text-sm text-gray-500">Invoice Management System</p>
               </div>
-              <div class="invoice-title">
-                <div class="invoice-title-text">INVOICE</div>
-                <div class="invoice-title-number">#{{ state?.appData?.data?.invoice?.invoiceNumber }}</div>
+              <div class="text-right">
+                <p class="text-xs font-medium uppercase tracking-widest text-gray-400">Invoice</p>
+                <p class="mt-1 text-lg font-bold text-indigo-600">
+                  #{{ state?.appData?.data?.invoice?.invoiceNumber }}
+                </p>
               </div>
             </div>
 
-            <div class="invoice-divider"></div>
-
-            <div class="invoice-parties">
+            <!-- from / bill to / details -->
+            <div class="mt-6 grid grid-cols-3 gap-8">
               <div>
-                <div class="invoice-party-label">From</div>
-                <div class="invoice-party-name">TechBridge, Inc.</div>
-                <div class="invoice-party-details">
+                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">From</p>
+                <p class="mt-2 font-semibold text-gray-900">TechBridge, Inc.</p>
+                <p class="mt-1 text-sm leading-relaxed text-gray-500">
                   123 King William Road<br>
                   Adelaide, SA 5000<br>
-                  Phone: (123) 456-7890<br>
+                  (123) 456-7890<br>
                   billing&#64;techbridge.com
-                </div>
+                </p>
               </div>
 
               <div>
-                <div class="invoice-party-label">Bill To</div>
-                <div class="invoice-party-name">{{ state?.appData?.data?.customer?.name }}</div>
-                <div class="invoice-party-details">
+                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Bill To</p>
+                <p class="mt-2 font-semibold text-gray-900">{{ state?.appData?.data?.customer?.name }}</p>
+                <p class="mt-1 text-sm leading-relaxed text-gray-500">
                   {{ state?.appData?.data?.customer?.address }}<br>
                   {{ state?.appData?.data?.customer?.email }}<br>
                   {{ state?.appData?.data?.customer?.phone }}
-                </div>
+                </p>
               </div>
 
               <div>
-                <div class="invoice-party-label">Details</div>
-                <div class="invoice-party-details">
+                <p class="text-xs font-semibold uppercase tracking-wider text-gray-400">Details</p>
+                <div class="mt-2 space-y-2 text-sm">
                   <div>
-                    <span class="invoice-detail-key">Invoice Date:</span><br>
-                    {{ state?.appData?.data?.invoice?.date | date:'mediumDate' }}
+                    <p class="text-gray-400">Invoice Date</p>
+                    <p class="font-medium text-gray-900">{{ state?.appData?.data?.invoice?.date | date:'mediumDate' }}</p>
                   </div>
-                  <div style="margin-top:8px;">
-                    <span class="invoice-detail-key">Due Date:</span><br>
-                    30 days from invoice date
+                  <div>
+                    <p class="text-gray-400">Due Date</p>
+                    <p class="font-medium text-gray-900">30 days from invoice date</p>
                   </div>
-                  <div style="margin-top:8px;">
-                    <span class="invoice-detail-key">Status:</span><br>
-                    <span class="invoice-status-badge">{{ state?.appData?.data?.invoice?.status }}</span>
+                  <div>
+                    <p class="text-gray-400">Status</p>
+                    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ring-1
+                      {{ state?.appData?.data?.invoice?.status === 'PAID'
+                          ? 'bg-green-50 text-green-700 ring-green-600/20'
+                          : state?.appData?.data?.invoice?.status === 'OVERDUE'
+                          ? 'bg-red-50 text-red-700 ring-red-600/20'
+                          : 'bg-yellow-50 text-yellow-700 ring-yellow-600/20' }}">
+                      {{ state?.appData?.data?.invoice?.status }}
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <table class="invoice-table">
-              <thead>
-                <tr>
-                  <th style="width:20%">#</th>
-                  <th style="width:80%">Service Description</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (service of state?.appData?.data?.invoice?.services?.split(','); track $index) {
-                  <tr>
-                    <td>{{ state?.appData?.data?.invoice?.invoiceNumber }}</td>
-                    <td>{{ service }}</td>
+            <!-- services table -->
+            <div class="mt-8 overflow-hidden rounded-lg ring-1 ring-gray-200">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="bg-gray-50">
+                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500" style="width:15%">#</th>
+                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Service Description</th>
                   </tr>
-                }
-              </tbody>
-            </table>
+                </thead>
+                <tbody class="divide-y divide-gray-100 bg-white">
+                  @for (service of state?.appData?.data?.invoice?.services?.split(','); track $index) {
+                    <tr>
+                      <td class="px-4 py-3 text-gray-400">{{ $index + 1 }}</td>
+                      <td class="px-4 py-3 text-gray-700">{{ service.trim() }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
 
-            <div class="invoice-totals">
-              <div class="invoice-totals-box">
-                <div class="invoice-totals-row">
-                  <span>Subtotal</span>
-                  <span>${{ state?.appData?.data?.invoice?.total }}</span>
+            <!-- totals -->
+            <div class="mt-6 flex justify-end">
+              <div class="w-64 space-y-2">
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-500">Subtotal</span>
+                  <span class="font-medium text-gray-900">${{ state?.appData?.data?.invoice?.total }}</span>
                 </div>
-                <div class="invoice-totals-row">
-                  <span>Tax (10%)</span>
-                  <span>${{ (state?.appData?.data?.invoice?.total ?? 0) * 0.1 | number:'.2-2' }}</span>
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-500">Tax (10%)</span>
+                  <span class="font-medium text-gray-900">${{ (state?.appData?.data?.invoice?.total ?? 0) * 0.1 | number:'.2-2' }}</span>
                 </div>
-                <div class="invoice-total-due">
-                  <span class="invoice-total-due-label">Total Due</span>
-                  <span class="invoice-total-due-amount">
-                    ${{ (state?.appData?.data?.invoice?.total ?? 0) * 1.1 | number:'.2-2' }}
-                  </span>
+                <div class="flex justify-between rounded-lg bg-indigo-600 px-4 py-3 text-sm font-semibold text-white">
+                  <span>Total Due</span>
+                  <span>${{ (state?.appData?.data?.invoice?.total ?? 0) * 1.1 | number:'.2-2' }}</span>
                 </div>
               </div>
             </div>
 
-            <div class="invoice-footer">
-              <div class="invoice-footer-heading">THANK YOU FOR YOUR BUSINESS</div>
-              <div class="invoice-footer-links">
-                <span>techBridge.com</span>
-                <span>(123) 456-7890</span>
-                <span>billing&#64;techBridge.com</span>
-              </div>
+            <!-- footer -->
+            <div class="mt-8 border-t border-gray-200 pt-6 text-center">
+              <p class="text-xs font-semibold uppercase tracking-widest text-gray-400">Thank you for your business</p>
+              <p class="mt-1 text-xs text-gray-400">techbridge.com · (123) 456-7890 · billing&#64;techbridge.com</p>
             </div>
 
           </div><!-- /#invoice -->
 
         </div>
-      </section>
+      </div>
 
-    </ng-container>
-  </ng-container>
+    }
+  }
 }

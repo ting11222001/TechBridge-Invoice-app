@@ -2,3 +2,15 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i');
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css');
 @import "tailwindcss";
+
+/* print styles: hide everything except #invoice */
+@media print {
+  body * { visibility: hidden; }
+  #invoicePDF, #invoicePDF * { visibility: visible; }
+  #invoicePDF {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}
