@@ -1,305 +1,270 @@
 @if (profileState$ | async; as state) {
 <ng-container>
-    <ng-container>
-       <!-- <div>{{ state | json }} </div> --> 
-       <section>
-          <div class="container">
-             <nav aria-label="breadcrumb" style="margin-top: 8px;">
-                <ol class="breadcrumb">
-                   <li class="breadcrumb-item">
-                      <a [routerLink]="['/']">Home</a>
-                   </li>
-                   <li class="breadcrumb-item active"> Users </li>
-                   <li class="breadcrumb-item active" aria-current="page">{{ state?.appData?.data?.user?.firstName }} {{ state?.appData?.data?.user?.lastName }}</li>
-                </ol>
-             </nav>
-             <div class="bg-white shadow rounded-lg d-block d-sm-flex" style="border-radius: 8px;">
-                <div class="profile-tab-nav border-right">
-                   <div class="p-4">
-                      <div class="img-circle text-center mb-3" >
-                         <span style="position: relative">
-                            <img [src]="state?.appData?.data?.user?.imageUrl" alt="Image" class="shadow" />
-                            <i class="bi bi-camera-fill right-position"></i>
-                         </span>
-                      </div>
-                      <h4 class="text-center">{{ state?.appData?.data?.user?.firstName }} {{ state?.appData?.data?.user?.lastName }}</h4>
-                      <span class="">Since {{ state?.appData?.data?.user?.createdAt | date: 'MMMM d, y' }}</span>
-                   </div>
-                   <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                      <a class="nav-link active" id="profile" data-bs-toggle="pill" data-bs-target="#profile-tab" aria-selected="true" aria-controls="profile" role="tab">
-                         <i class="bi bi-person-circle" style="margin-right: 12px;"></i> Profile
-                      </a>
-                      <a class="nav-link" id="password" data-bs-toggle="pill" data-bs-target="#password-tab" aria-selected="true" aria-controls="password" role="tab">
-                         <i class="bi bi-key-fill" style="margin-right: 12px;"></i> Password
-                      </a>
-                      <a class="nav-link" id="security" data-bs-toggle="pill" data-bs-target="#security-tab" aria-selected="true" aria-controls="security" role="tab">
-                         <i class="bi bi-shield-shaded" style="margin-right: 12px;"></i> Authorization
-                      </a>
-                      <a class="nav-link" id="application" data-bs-toggle="pill" data-bs-target="#application-tab" aria-selected="true" aria-controls="application" role="tab">
-                         <i class="bi bi-gear" style="margin-right: 12px;"></i> Account
-                      </a>
-                      <a class="nav-link" id="notification" data-bs-toggle="pill" data-bs-target="#notification-tab" aria-selected="true" aria-controls="notification" role="tab">
-                         <i class="bi bi-lock-fill" style="margin-right: 12px;"></i> Authentication
-                      </a>
-                   </div>
+  <ng-container>
+    <!-- <div>{{ state | json }} </div> -->
+    <section>
+      <div class="container">
+
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4 mt-2">
+          <ol class="flex items-center gap-1.5 text-xs text-gray-500">
+            <li><a [routerLink]="['/']" class="hover:text-white transition-colors">Home</a></li>
+            <li class="text-gray-700">/</li>
+            <li class="text-gray-400">Users</li>
+            <li class="text-gray-700">/</li>
+            <li class="text-gray-300">{{ state?.appData?.data?.user?.firstName }} {{ state?.appData?.data?.user?.lastName }}</li>
+          </ol>
+        </nav>
+
+        <!-- Main layout -->
+        <div class="flex gap-6">
+
+          <!-- Sidebar -->
+          <aside class="w-56 shrink-0 space-y-2">
+
+            <!-- Avatar card -->
+            <div class="rounded-xl bg-gray-900 ring-1 ring-gray-800 p-5 text-center">
+              <div class="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-gray-700 overflow-hidden">
+                @if (state?.appData?.data?.user?.imageUrl) {
+                  <img [src]="state?.appData?.data?.user?.imageUrl" alt="Image" class="h-full w-full object-cover" />
+                } @else {
+                  <svg class="h-9 w-9 fill-gray-400" viewBox="0 0 24 24">
+                    <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                  </svg>
+                }
+              </div>
+              <p class="text-sm font-medium text-gray-50">{{ state?.appData?.data?.user?.firstName }} {{ state?.appData?.data?.user?.lastName }}</p>
+              <p class="text-xs text-gray-500">Since {{ state?.appData?.data?.user?.createdAt | date: 'MMMM d, y' }}</p>
+            </div>
+
+            <!-- Nav links -->
+            <nav class="rounded-xl bg-gray-900 ring-1 ring-gray-800 overflow-hidden">
+              <a (click)="activeTab.set('profile')"
+                 [class]="activeTab() === 'profile'
+                   ? 'flex items-center gap-3 border-l-2 border-indigo-500 bg-indigo-950/30 px-4 py-3 text-sm text-indigo-400 cursor-pointer'
+                   : 'flex items-center gap-3 border-l-2 border-transparent px-4 py-3 text-sm text-gray-400 hover:text-white cursor-pointer'">
+                <span [class]="activeTab() === 'profile' ? 'h-2 w-2 rounded-full bg-indigo-500' : 'h-2 w-2 rounded-full bg-gray-600'"></span>
+                Profile
+              </a>
+              <!-- Password tab (content not yet implemented)
+              <a (click)="activeTab.set('password')"
+                 [class]="activeTab() === 'password'
+                   ? 'flex items-center gap-3 border-l-2 border-indigo-500 bg-indigo-950/30 px-4 py-3 text-sm text-indigo-400 border-t border-gray-800 cursor-pointer'
+                   : 'flex items-center gap-3 border-l-2 border-transparent px-4 py-3 text-sm text-gray-400 hover:text-white border-t border-gray-800 cursor-pointer'">
+                <span [class]="activeTab() === 'password' ? 'h-2 w-2 rounded-full bg-indigo-500' : 'h-2 w-2 rounded-full bg-gray-600'"></span>
+                Password
+              </a>
+              -->
+              <a (click)="activeTab.set('security')"
+                 [class]="activeTab() === 'security'
+                   ? 'flex items-center gap-3 border-l-2 border-indigo-500 bg-indigo-950/30 px-4 py-3 text-sm text-indigo-400 border-t border-gray-800 cursor-pointer'
+                   : 'flex items-center gap-3 border-l-2 border-transparent px-4 py-3 text-sm text-gray-400 hover:text-white border-t border-gray-800 cursor-pointer'">
+                <span [class]="activeTab() === 'security' ? 'h-2 w-2 rounded-full bg-indigo-500' : 'h-2 w-2 rounded-full bg-gray-600'"></span>
+                Authorization
+              </a>
+              <a (click)="activeTab.set('application')"
+                 [class]="activeTab() === 'application'
+                   ? 'flex items-center gap-3 border-l-2 border-indigo-500 bg-indigo-950/30 px-4 py-3 text-sm text-indigo-400 border-t border-gray-800 cursor-pointer'
+                   : 'flex items-center gap-3 border-l-2 border-transparent px-4 py-3 text-sm text-gray-400 hover:text-white border-t border-gray-800 cursor-pointer'">
+                <span [class]="activeTab() === 'application' ? 'h-2 w-2 rounded-full bg-indigo-500' : 'h-2 w-2 rounded-full bg-gray-600'"></span>
+                Account
+              </a>
+              <!-- Authentication tab (content not yet implemented)
+              <a (click)="activeTab.set('notification')"
+                 [class]="activeTab() === 'notification'
+                   ? 'flex items-center gap-3 border-l-2 border-indigo-500 bg-indigo-950/30 px-4 py-3 text-sm text-indigo-400 border-t border-gray-800 cursor-pointer'
+                   : 'flex items-center gap-3 border-l-2 border-transparent px-4 py-3 text-sm text-gray-400 hover:text-white border-t border-gray-800 cursor-pointer'">
+                <span [class]="activeTab() === 'notification' ? 'h-2 w-2 rounded-full bg-indigo-500' : 'h-2 w-2 rounded-full bg-gray-600'"></span>
+                Authentication
+              </a>
+              -->
+            </nav>
+
+          </aside>
+
+          <!-- Content -->
+          <div class="flex-1 space-y-4">
+
+            <!-- Profile tab -->
+            @if (activeTab() === 'profile') {
+              <div class="rounded-xl bg-gray-900 ring-1 ring-gray-800 overflow-hidden">
+
+                <form #profileForm="ngForm" (ngSubmit)="updateProfile(profileForm)">
+                  <input type="hidden" name="id" [ngModel]="state?.appData?.data?.user?.id">
+
+                  <!-- Profile section header -->
+                  <div class="border-b border-gray-800 px-6 py-5">
+                    <h2 class="text-sm font-medium text-gray-50">Profile Settings</h2>
+                    <p class="mt-1 text-xs text-gray-500">This information will be displayed publicly so be careful what you share.</p>
+                  </div>
+
+                  <!-- Profile fields -->
+                  <div class="px-6 py-5 grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1.5">
+                      <label class="text-xs text-gray-400">First Name</label>
+                      <input type="text" name="firstName"
+                             [ngModel]="state?.appData?.data?.user?.firstName"
+                             [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()"
+                             class="rounded-md bg-gray-800 border border-gray-700 px-3 py-2 text-sm text-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:opacity-50" />
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                      <label class="text-xs text-gray-400">Last Name</label>
+                      <input type="text" name="lastName"
+                             [ngModel]="state?.appData?.data?.user?.lastName"
+                             [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()"
+                             class="rounded-md bg-gray-800 border border-gray-700 px-3 py-2 text-sm text-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:opacity-50" />
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                      <label class="text-xs text-gray-400">Email</label>
+                      <input type="text" name="email"
+                             [ngModel]="state?.appData?.data?.user?.email"
+                             [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()"
+                             class="rounded-md bg-gray-800 border border-gray-700 px-3 py-2 text-sm text-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:opacity-50" />
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                      <label class="text-xs text-gray-400">Phone</label>
+                      <input type="text" name="phone"
+                             [ngModel]="state?.appData?.data?.user?.phone"
+                             [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()"
+                             class="rounded-md bg-gray-800 border border-gray-700 px-3 py-2 text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:opacity-50" />
+                    </div>
+                  </div>
+
+                  <!-- Personal information section header -->
+                  <div class="border-t border-b border-gray-800 px-6 py-5">
+                    <h2 class="text-sm font-medium text-gray-50">Personal information</h2>
+                    <p class="mt-1 text-xs text-gray-500">Use a permanent address where you can receive mail.</p>
+                  </div>
+
+                  <!-- Personal information fields -->
+                  <div class="px-6 py-5 grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1.5">
+                      <label class="text-xs text-gray-400">Job Title</label>
+                      <input type="text" name="title"
+                             [ngModel]="state?.appData?.data?.user?.title"
+                             [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()"
+                             class="rounded-md bg-gray-800 border border-gray-700 px-3 py-2 text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:opacity-50" />
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                      <label class="text-xs text-gray-400">Address</label>
+                      <input type="text" name="address"
+                             [ngModel]="state?.appData?.data?.user?.address"
+                             [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()"
+                             class="rounded-md bg-gray-800 border border-gray-700 px-3 py-2 text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:opacity-50" />
+                    </div>
+                    <div class="col-span-2 flex flex-col gap-1.5">
+                      <label class="text-xs text-gray-400">Bio</label>
+                      <textarea name="bio"
+                                [ngModel]="state?.appData?.data?.user?.bio"
+                                [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()"
+                                rows="3"
+                                class="rounded-md bg-gray-800 border border-gray-700 px-3 py-2 text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none disabled:opacity-50"></textarea>
+                    </div>
+                  </div>
+
+                  <!-- Actions -->
+                  <div class="flex justify-end gap-3 border-t border-gray-800 px-6 py-4">
+                    <button type="button" class="rounded-md border border-gray-700 px-4 py-1.5 text-sm text-gray-400 hover:text-white">Cancel</button>
+                    <button [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()"
+                            type="submit"
+                            class="rounded-md bg-indigo-600 px-4 py-1.5 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5">
+                      @if (isLoading()) {
+                        <span class="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" role="status" aria-hidden="true"></span>
+                      }
+                      {{ isLoading() ? 'Loading...' : 'Update' }}
+                    </button>
+                  </div>
+
+                </form>
+              </div>
+            }
+
+            <!-- Authorization tab -->
+            @if (activeTab() === 'security') {
+              <div class="rounded-xl bg-gray-900 ring-1 ring-gray-800 overflow-hidden">
+                <div class="border-b border-gray-800 px-6 py-5">
+                  <h2 class="text-sm font-medium text-gray-50">Authorization Settings</h2>
                 </div>
-                <div class="tab-content p-4 p-md-5" id="v-pills-tabContent" style="border-left: 1px solid #d4d0d0;">
-                   <div class="tab-pane fade show active" id="profile-tab" role="tabpanel" aria-labelledby="profile" style="min-height: 510px;">
-                      <h3 class="mb-4">Profile Settings</h3>
-                      <form #profileForm="ngForm" (ngSubmit)="updateProfile(profileForm)">
-                         <input type="hidden" name="id" [ngModel]="state?.appData?.data?.user?.id">
-                         <div class="row">
-                            <div class="col-md-6">
-                               <div class="form-group">
-                                    <label>First Name</label>
-                                    <input type="text" name="firstName" [ngModel]="state?.appData?.data?.user?.firstName" [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()" class="form-control">
-                               </div>
-                            </div>
-                            <div class="col-md-6">
-                               <div class="form-group">
-                                    <label>Last Name</label>
-                                    <input type="text" name="lastName" [ngModel]="state?.appData?.data?.user?.lastName" [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()" class="form-control">
-                               </div>
-                            </div>
-                            <div class="col-md-6">
-                               <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="text" name="email" [ngModel]="state?.appData?.data?.user?.email" [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()" class="form-control">
-                               </div>
-                            </div>
-                            <div class="col-md-6">
-                               <div class="form-group">
-                                    <label>Phone</label>
-                                    <input type="text" name="phone" [ngModel]="state?.appData?.data?.user?.phone" [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()" class="form-control">
-                               </div>
-                            </div>
-                            <div class="col-md-6">
-                               <div class="form-group">
-                                    <label>Address</label>
-                                    <input type="text" name="address" [ngModel]="state?.appData?.data?.user?.address" [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()" class="form-control">
-                               </div>
-                            </div>
-                            <div class="col-md-6">
-                               <div class="form-group">
-                                    <label>Job Title</label>
-                                    <input type="text" name="title" [ngModel]="state?.appData?.data?.user?.title" [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()" class="form-control">
-                               </div>
-                            </div>
-                            <div class="col-md-12">
-                               <div class="form-group">
-                                    <label>Bio</label>
-                                  <textarea name="bio" [ngModel]="state?.appData?.data?.user?.bio" [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || isLoading()" class="form-control" rows="4"></textarea>
-                               </div>
-                            </div>
-                         </div>
-                         <div>
-                            <button [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || this.isLoading()" type="submit" class="btn btn-primary">
-                                @if (isLoading()) {
-                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="margin-right: 5px;"></span>
-                                }
-                               {{ isLoading() ? 'Loading...' : 'Update'}}
-                            </button>
-                         </div>
-                      </form>
-                   </div>
-                   <!-- <div class="tab-pane fade" id="password-tab" role="tabpanel" aria-labelledby="password" style="min-height: 510px;">
-                      <h3 class="mb-4">Password Settings</h3>
-                      <form #passwordForm="ngForm" (ngSubmit)="updatePassword(passwordForm)">
-                      <div class="row">
-                         <div class="col-md-6">
-                            <div class="form-group">
-                                 <label>Current password</label>
-                                 <input type="password" name="currentPassword" ngModel [disabled]="(isLoading$ | async)" class="form-control" required>
-                            </div>
-                         </div>
-                      </div>
-                      <div class="row">
-                         <div class="col-md-6">
-                            <div class="form-group">
-                                 <label>New password</label>
-                                 <input type="password" name="newPassword" ngModel [disabled]="(isLoading$ | async)" class="form-control" minlength="5" required>
-                            </div>
-                         </div>
-                         <div class="col-md-6">
-                            <div class="form-group">
-                                 <label>Confirm new password</label>
-                                 <input type="password" name="confirmNewPassword" ngModel [disabled]="(isLoading$ | async)" class="form-control" minlength="5" required>
-                            </div>
-                         </div>
-                      </div>
-                      <div>
-                        <button [disabled]="passwordForm.invalid || (isLoading$ | async)" type="submit" class="btn btn-primary">
-                           <span *ngIf="isLoading$ | async" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="margin-right: 5px;"></span>
-                           <span *ngIf="isLoading$ | async">Loading...</span>
-                           <span *ngIf="!(isLoading$ | async)">Update</span>
-                        </button>
-                      </div>
-                   </form>
-                   </div> -->
-                   <div class="tab-pane fade" id="security-tab" role="tabpanel" aria-labelledby="security" style="min-height: 510px;">
-                      <h3 class="mb-4">Authorization Settings</h3>
-                      <form #roleForm="ngForm" (ngSubmit)="updateRole(roleForm)">
-                      <div class="row">
-                         <div class="col-md-6">
-                            <div class="form-group">
-                               <label style="margin-bottom: 5px;">Role Name</label>
-                               <!-- <select name="roleName" [ngModel]="state?.appData?.data?.user?.roleName" [disabled]="!(state?.appData?.data?.user?.roleName === 'ROLE_SYSADMIN' || state?.appData?.data?.user?.roleName === 'ROLE_ADMIN') || (isLoading$ | async)" class="form-control select-cl" required>
-                                  <option *ngFor="let role of state?.appData?.data?.roles"
-                                          [selected]="state?.appData?.data?.user?.roleName === role.name"
-                                          [disabled]="!(state?.appData?.data?.user?.roleName === 'ROLE_SYSADMIN' || state?.appData?.data?.user?.roleName === 'ROLE_ADMIN') || (isLoading$ | async)"
-                                          [ngValue]="role.name"
-                                  class="select-cl">{{ role.name }}</option>
-                              </select> -->
-                            </div>
-                         </div>
-                         <div class="col-md-6">
-                            <div class="form-group">
-                                 <label style="margin-bottom: 5px;">Role Permissions</label>
-                                 <!-- <input type="text" *ngFor="let permission of state?.appData?.data?.user?.permissions.split(',')" [value]="permission" [disabled]="true" class="form-control" style="margin-bottom: 5px;"> -->
-                            </div>
-                         </div>
-                      </div>
-                      <!-- <div>
-                        <button [disabled]="!(state?.appData?.data?.user?.roleName === 'ROLE_SYSADMIN' || state?.appData?.data?.user?.roleName === 'ROLE_ADMIN') || (isLoading$ | async)" type="submit" class="btn btn-primary">
-                           <span *ngIf="isLoading$ | async" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="margin-right: 5px;"></span>
-                           <span *ngIf="isLoading$ | async">Loading...</span>
-                           <span *ngIf="!(isLoading$ | async)">Update</span>
-                        </button>
-                      </div> -->
-                   </form>
-                   </div>
-                   <div class="tab-pane fade" id="application-tab" role="tabpanel" aria-labelledby="application" style="min-height: 510px;">
-                      <h3 class="mb-4">Account Settings</h3>
-                      <form #settingsForm="ngForm" (ngSubmit)="updateAccountSettings(settingsForm)">
-                         <input type="hidden" name="userId">
-                      <div class="row">
-                         <div class="col-md-6">
-                            <div class="form-group">
-                               <!-- <div class="form-check">
-                                  <input [disabled]="!(state?.appData?.data?.user?.roleName === 'ROLE_SYSADMIN' || state?.appData?.data?.user?.roleName === 'ROLE_ADMIN') || (isLoading$ | async)"
-                                       [checked]="state?.appData?.data?.user?.enabled"
-                                       [ngModel]="state?.appData?.data?.user?.enabled"
-                                       type="checkbox" name="enabled" class="form-check-input">
-                                  <label class="form-check-label" for="enabled">
-                                  Account Active
-                                  </label>
-                               </div> -->
-                               <!-- <div class="form-check">
-                                  <input [disabled]="!(state?.appData?.data?.user?.roleName === 'ROLE_SYSADMIN' || state?.appData?.data?.user?.roleName === 'ROLE_ADMIN') || (isLoading$ | async)"
-                                       [checked]="state?.appData?.data?.user?.notLocked"
-                                       [ngModel]="state?.appData?.data?.user?.notLocked"
-                                       type="checkbox" name="notLocked" class="form-check-input">
-                                  <label class="form-check-label" for="notLocked">
-                                  Account Unlocked
-                                  </label>
-                               </div> -->
-                            </div>
-                         </div>
-                      </div>
-                      <!-- <div>
-                        <button [disabled]="!(state?.appData?.data?.user?.roleName === 'ROLE_SYSADMIN' || state?.appData?.data?.user?.roleName === 'ROLE_ADMIN') || (isLoading$ | async)" type="submit" class="btn btn-primary">
-                           <span *ngIf="isLoading$ | async" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="margin-right: 5px;"></span>
-                           <span *ngIf="isLoading$ | async">Loading...</span>
-                           <span *ngIf="!(isLoading$ | async)">Update</span>
-                        </button>
-                      </div> -->
-                   </form>
-                   </div>
-                   <!-- <div class="tab-pane fade" id="notification-tab" role="tabpanel" aria-labelledby="notification" style="min-height: 510px;">
-                      <h3 class="mb-4">Authentication Settings</h3>
-                      <p>These settings help keep your account more secure.</p>
-                      <div class="list-group mb-5 shadow">
-                         <div class="list-group-item">
-                             <div class="row align-items-center">
-                                 <div class="col">
-                                     <strong class="mb-2">Multi-Factor Authentication</strong>
-                                     <span *ngIf="state?.appData?.data?.user?.usingMfa" class="badge bg-success mx-3">Enabled</span>
-                                     <span *ngIf="!state?.appData?.data?.user?.usingMfa" class="badge bg-warning mx-3">Disabled</span>
-                                     <p class="text-muted mb-0">Set up Multi-factor Authentication (MFA) help keep your account more secure</p>
-                                 </div>
-                                 <div class="col-auto">
-                                     <button (click)="toggleMfa()" [disabled]="state?.appData?.data?.user?.roleName === 'ROLE_USER' || (isLoading$ | async)" class="btn btn-primary btn-sm">
-                                       {{ state?.appData?.data?.user?.usingMfa ? 'Disable' : 'Enable' }}
-                                       <span *ngIf=" (isLoading$ | async)" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="margin-right: 5px;"></span>
-                                     </button>
-                                 </div>
-                             </div>
-                         </div>
-                          <div class="list-group-item">
-                              <div class="row align-items-center">
-                                  <div class="col">
-                                      <strong class="mb-2">Activity Logs</strong>
-                                      <p class="text-muted mb-0">Show the latst activites on your account</p>
-                                  </div>
-                                  <div class="col-auto">
-                                      <div class="custom-control custom-switch">
-                                          <input type="checkbox" (change)="toggleLogs()" [disabled]="(isLoading$ | async)"
-                                          [checked]="(showLogs$ | async)" class="custom-control-input" id="activityLog">
-                                          <span class="custom-control-label"></span>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                   </div> -->
+                <form #roleForm="ngForm" (ngSubmit)="updateRole(roleForm)">
+                  <div class="px-6 py-5 grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1.5">
+                      <label class="text-xs text-gray-400">Role Name</label>
+                      <!-- role select to be implemented -->
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                      <label class="text-xs text-gray-400">Role Permissions</label>
+                      <!-- permissions list to be implemented -->
+                    </div>
+                  </div>
+                </form>
+              </div>
+            }
+
+            <!-- Account tab -->
+            @if (activeTab() === 'application') {
+              <div class="rounded-xl bg-gray-900 ring-1 ring-gray-800 overflow-hidden">
+                <div class="border-b border-gray-800 px-6 py-5">
+                  <h2 class="text-sm font-medium text-gray-50">Account Settings</h2>
                 </div>
-             </div>
-             <!-- <div *ngIf="(showLogs$ | async)" class="row">
-                <div class="col-xl-12 mt-4">
-                   <div class="card" style="border-radius: 8px;">
-                      <div class="card-body">
-                         <h5 class="card-title">Account Activities</h5>
-                         <h6 class="card-subtitle mb-2 text-muted">Latest activities on your account.                        </h6>
-                         <table class="table table-hover">
-                            <thead>
-                               <tr>
-                                  <th scope="col">Device</th>
-                                  <th scope="col">IP Address</th>
-                                  <th scope="col">Date</th>
-                                  <th scope="col">Type</th>
-                                  <th scope="col">Description</th>
-                                  <th scope="col">Action</th>
-                               </tr>
-                            </thead>
-                            <tbody>
-                               <tr *ngFor="let event of state?.appData?.data?.events">
-                                  <td>{{ event.device }}</td>
-                                  <td>{{ event.ipAddress }}</td>
-                                  <td>{{ event.createdAt | date: 'MMMM d, y, h:mm a' }}</td>
-                                  <td>
-                                    <span class="badge pill" [ngClass]="[
-                                    event.type === EventType.LOGIN_ATTEMPT_SUCCESS ? 'bg-success' : '',  
-                                    event.type === EventType.LOGIN_ATTEMPT ? 'bg-warning' : '',
-                                    event.type === EventType.PROFILE_UPDATE ? 'bg-primary' : '',
-                                    event.type === EventType.LOGIN_ATTEMPT_FAILURE ? 'bg-danger' : '',
-                                    event.type === EventType.PROFILE_PICTURE_UPDATE ? 'bg-primary' : '',
-                                    event.type === EventType.ROLE_UPDATE ? 'bg-info' : '',
-                                    event.type === EventType.ACCOUNT_SETTINGS_UPDATE ? 'bg-warning' : '',
-                                    event.type === EventType.PASSWORD_UPDATE ? 'bg-warning' : '',
-                                    event.type === EventType.MFA_UPDATE ? 'bg-info' : ''
-                                    ]">
-                                       {{ event.type }}
-                                     </span>
-                                  </td>
-                                  <td>{{ event.description }}</td>
-                                  <td>
-                                     <button type="button" class="btn btn-sm" style="background-color: #fd5d0d; font-weight: 450;">Report</button>
-                                  </td>
-                               </tr>
-                            </tbody>
-                         </table>
-                      </div>
-                   </div>
-                </div>
-             </div> -->
+                <form #settingsForm="ngForm" (ngSubmit)="updateAccountSettings(settingsForm)">
+                  <input type="hidden" name="userId">
+                  <div class="px-6 py-5">
+                    <!-- account enabled / notLocked checkboxes to be implemented -->
+                  </div>
+                </form>
+              </div>
+            }
+
+            <!-- Activity table -->
+            <div class="rounded-xl bg-gray-900 ring-1 ring-gray-800 overflow-hidden">
+              <div class="border-b border-gray-800 px-6 py-4 text-sm font-medium text-gray-50">Account activity</div>
+              <table class="w-full text-xs">
+                <thead>
+                  <tr class="border-b border-gray-800 bg-gray-800/50">
+                    <th class="px-6 py-3 text-left font-normal text-gray-400 uppercase tracking-wider">Event</th>
+                    <th class="px-6 py-3 text-left font-normal text-gray-400 uppercase tracking-wider">Device</th>
+                    <th class="px-6 py-3 text-left font-normal text-gray-400 uppercase tracking-wider">IP address</th>
+                    <th class="px-6 py-3 text-left font-normal text-gray-400 uppercase tracking-wider">Date</th>
+                    <th class="px-6 py-3 text-left font-normal text-gray-400 uppercase tracking-wider">Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-800">
+                  @for (event of state?.appData?.data?.events; track event.id) {
+                    <tr class="hover:bg-gray-800/50">
+                      <td class="px-6 py-3 text-gray-100">{{ event.type }}</td>
+                      <td class="px-6 py-3 text-gray-400">{{ event.device }}</td>
+                      <td class="px-6 py-3 text-gray-400">{{ event.ipAddress }}</td>
+                      <td class="px-6 py-3 text-gray-400">{{ event.createdAt | date: 'MMM d, y, h:mm a' }}</td>
+                      <td class="px-6 py-3">
+                        <span [ngClass]="{
+                          'rounded-full px-2.5 py-0.5 text-xs font-medium ring-1': true,
+                          'bg-green-900/30 text-green-400 ring-green-500/30': event.type === EventType.LOGIN_ATTEMPT_SUCCESS || event.type === EventType.PROFILE_UPDATE || event.type === EventType.PROFILE_PICTURE_UPDATE,
+                          'bg-red-900/30 text-red-400 ring-red-500/30': event.type === EventType.LOGIN_ATTEMPT_FAILURE,
+                          'bg-yellow-900/30 text-yellow-400 ring-yellow-500/30': event.type === EventType.LOGIN_ATTEMPT || event.type === EventType.ACCOUNT_SETTINGS_UPDATE || event.type === EventType.PASSWORD_UPDATE || event.type === EventType.MFA_UPDATE,
+                          'bg-indigo-900/30 text-indigo-400 ring-indigo-500/30': event.type === EventType.ROLE_UPDATE
+                        }">{{ event.description }}</span>
+                      </td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td colspan="5" class="px-6 py-8 text-center text-gray-500">No activity recorded yet.</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
           </div>
-       </section>
-    </ng-container>
- </ng-container>
+        </div>
+
+      </div>
+    </section>
+  </ng-container>
+</ng-container>
 }
 
- <!-- profile image change form -->
- <!-- <form enctype="multipart/form-data" style="display:none;">
-    <input type="file" #fileInput (change)="updatePicture($event.target.files[0])" name="image" id="image"
-       placeholder="file" ngModel accept="image/*" />
- </form> -->
+<!-- profile image change form -->
+<!-- <form enctype="multipart/form-data" style="display:none;">
+  <input type="file" #fileInput (change)="updatePicture($event.target.files[0])" name="image" id="image"
+     placeholder="file" ngModel accept="image/*" />
+</form> -->

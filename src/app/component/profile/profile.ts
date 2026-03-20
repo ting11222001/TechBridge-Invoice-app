@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { catchError, map, Observable, of, startWith } from 'rxjs';
 import { CustomHttpResponse, Profile } from '../../interface/appstates';
 import { DataState } from '../../enum/datastate.enum';
+import { EventType } from '../../enum/event-type.enum';
 import { UserService } from '../../service/user';
 import { State } from '../../interface/state';
 
@@ -19,7 +20,9 @@ export class ProfileComponent {
 
   private data = signal<CustomHttpResponse<Profile> | undefined>(undefined);
   readonly DataState = DataState;
+  readonly EventType = EventType;
 
+  activeTab = signal<string>('profile');
   isLoading = signal<boolean>(true);
 
   constructor(private userService: UserService) {}
