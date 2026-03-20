@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { NavbarComponent } from '../navbar/navbar';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -11,7 +10,7 @@ import { DataState } from '../../enum/datastate.enum';
 
 @Component({
   selector: 'app-newcustomer',
-  imports: [FormsModule, CommonModule, RouterModule, NavbarComponent],
+  imports: [FormsModule, CommonModule, RouterModule],
   templateUrl: './newcustomer.html',
   styleUrl: './newcustomer.css',
 })

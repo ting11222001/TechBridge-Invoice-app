@@ -1,5 +1,4 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { NavbarComponent } from '../navbar/navbar';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -14,7 +13,7 @@ import { DataState } from '../../enum/datastate.enum';
 
 @Component({
   selector: 'app-invoices',
-  imports: [FormsModule, CommonModule, RouterModule, NavbarComponent],
+  imports: [FormsModule, CommonModule, RouterModule],
   templateUrl: './invoices.html',
   styleUrl: './invoices.css',
 })

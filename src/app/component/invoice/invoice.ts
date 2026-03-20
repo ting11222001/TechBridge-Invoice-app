@@ -1,5 +1,4 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { NavbarComponent } from '../navbar/navbar';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, ParamMap, RouterModule } from '@angular/router';
@@ -12,7 +11,7 @@ import { jsPDF } from "jspdf";
 
 @Component({
   selector: 'app-invoice',
-  imports: [FormsModule, CommonModule, RouterModule, NavbarComponent],
+  imports: [FormsModule, CommonModule, RouterModule],
   templateUrl: './invoice.html',
   styleUrl: './invoice.css',
 })

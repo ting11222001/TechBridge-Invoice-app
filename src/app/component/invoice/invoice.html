@@ -1,8 +1,6 @@
 @if (invoiceState$ | async; as state) {
   <ng-container [ngSwitch]="state.dataState">
     <ng-container *ngSwitchCase="DataState.LOADED">
-      <app-navbar [user]="state?.appData?.data?.user"></app-navbar>
-
       <section class="invoice-section">
         <div class="container">
 

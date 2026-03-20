@@ -1,5 +1,4 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { NavbarComponent } from '../navbar/navbar';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -11,7 +10,7 @@ import { DataState } from '../../enum/datastate.enum';
 
 @Component({
   selector: 'app-newinvoice',
-  imports: [FormsModule, CommonModule, RouterModule, NavbarComponent],
+  imports: [FormsModule, CommonModule, RouterModule],
   templateUrl: './newinvoice.html',
   styleUrl: './newinvoice.css',
 })

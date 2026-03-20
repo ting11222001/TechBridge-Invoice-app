@@ -1,6 +1,5 @@
 import { Component, signal } from '@angular/core';
 import { StatsComponent } from '../stats/stats';
-import { NavbarComponent } from '../navbar/navbar';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -13,7 +12,7 @@ import { Customer } from '../../interface/customer';
 
 @Component({
   selector: 'app-home',
-  imports: [FormsModule, CommonModule, StatsComponent, RouterModule, NavbarComponent],
+  imports: [FormsModule, CommonModule, StatsComponent, RouterModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

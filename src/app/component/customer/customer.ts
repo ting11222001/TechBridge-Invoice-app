@@ -1,5 +1,4 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { NavbarComponent } from '../navbar/navbar';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router, RouterModule } from '@angular/router';
@@ -12,7 +11,7 @@ import { DataState } from '../../enum/datastate.enum';
 
 @Component({
   selector: 'app-customer',
-  imports: [FormsModule, CommonModule, RouterModule, NavbarComponent],
+  imports: [FormsModule, CommonModule, RouterModule],
   templateUrl: './customer.html',
   styleUrl: './customer.css',
 })
