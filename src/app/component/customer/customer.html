@@ -1,7 +1,7 @@
 @if (customerState$ | async; as state) {
-  <ng-container [ngSwitch]="state.dataState">
-    <ng-container *ngSwitchCase="DataState.LOADED">
-      <section class="min-h-screen bg-[#0d1117] text-gray-50 px-6 py-6">
+  @switch (state.dataState) {
+    @case (DataState.LOADED) {
+      <section class="min-h-screen text-gray-50">
 
         <!-- Breadcrumb -->
         <nav class="mb-6 text-sm text-gray-500">
@@ -240,6 +240,6 @@
         </div>
 
       </section>
-    </ng-container>
-  </ng-container>
+    }
+  }
 }

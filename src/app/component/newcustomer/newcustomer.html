@@ -1,11 +1,10 @@
 @if (newCustomerState$ | async; as state) {
   @switch (state.dataState) {
     @case (DataState.LOADED) {
-
-      <div class="min-h-screen bg-[#0d1117] p-8 font-sans">
+      <div class="min-h-screen">
 
         <!-- Breadcrumb -->
-        <nav class="text-sm text-gray-500 mb-1">
+        <nav class="mb-6 text-sm text-gray-500">
           <a [routerLink]="['/']" class="text-indigo-400 hover:text-indigo-300">Home</a> /
           <a [routerLink]="['/customers']" class="text-indigo-400 hover:text-indigo-300">Customers</a> / New
         </nav>
