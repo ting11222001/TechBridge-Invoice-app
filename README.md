@@ -16,7 +16,7 @@ In the TechBridge platform, admins coordinate with organisations (donors, refurb
 
 **[Watch the full demo video on YouTube](#)**
 
-<put a gif here>
+<!-- TODO: add demo GIF from /demo folder once recorded -->
 
 ## Table of Contents
 - [Tech Stack](#tech-stack)
