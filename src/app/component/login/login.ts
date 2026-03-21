@@ -7,6 +7,7 @@ import { UserService } from '../../service/user';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Key } from '../../enum/key.enum';
 import { CommonModule } from '@angular/common';
+import { DEMO_ACCOUNT_EMAIL, DEMO_ACCOUNT_PASSWORD } from '../../../constants/demo.constants';
 
 @Component({
   selector: 'app-login',
@@ -110,8 +111,8 @@ export class LoginComponent implements OnInit {
 
   fillDemoCredentials(logingForm: NgForm): void {
     logingForm.form.patchValue({
-      email: 'tiffany@gmail.com',
-      password: '123456'
+      email: DEMO_ACCOUNT_EMAIL,
+      password: DEMO_ACCOUNT_PASSWORD
     });
     logingForm.form.markAsDirty();
   }
