@@ -10,13 +10,16 @@ In the TechBridge platform, admins coordinate with organisations (donors, refurb
 - Track donations as financial records for compliance and tax purposes
 - Generate receipts for business donors (they need these for tax deductions)
 
-**[Backend Repo](#backend-repo)** - **[Full Demo Video (YouTube)](#)**
+**[Backend Repo](#getting-started-backend)** - **[Full Demo Video (YouTube)](#)**
 
 ## Demo
 
 **[Watch the full demo video on YouTube](#)**
 
+<!-- TODO: add vercel link and explanation railway for the backend may pause after some time -->
+
 <!-- TODO: add demo GIF from /demo folder once recorded -->
+
 
 ## Table of Contents
 - [Tech Stack](#tech-stack)
@@ -223,7 +226,7 @@ The app runs at `http://localhost:4200`. You'll need the backend running locally
 
 > Full backend setup (including IntelliJ environment variables and local Docker config) is in the backend repo's README.
 
-## Backend Repo
+## Getting Started (Backend)
 
 Go checkout the backend repo [here.](https://github.com/ting11222001/TechBridge-Invoice)
 
