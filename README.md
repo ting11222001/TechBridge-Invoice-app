@@ -1,38 +1,44 @@
-# TechBridge-Invoice (Frontend)
+# TechBridge Invoice
 
-TechBridge-Invoice is a full-stack, invoicing and financial records module for the TechBridge device donation platform. It lets admins create and manage customers, issue invoices, export reports, and control access with secure JWT-based authentication.
+> Full-stack invoicing module for a technology donation non-profit. Admins manage partner organisations as customers, issue invoices, and track payment status — backed by JWT auth, role-based access control, and a Spring Boot API.
 
-Explores the invoicing/financial records module for the TechBridge device donation platform. Built with Spring Boot + Angular as a focused learning project before integrating into the full system.
+[Live Demo](#) · [Backend Repo](https://github.com/ting11222001/TechBridge-Invoice) · [Demo Video](#)
 
-In the TechBridge platform, admins coordinate with organisations (donors, refurb partners, schools). There's a natural need to:
+---
 
-- Issue invoices to refurb partners for their services
-- Track donations as financial records for compliance and tax purposes
-- Generate receipts for business donors (they need these for tax deductions)
+## What's Built
 
-**[Backend Repo](#getting-started-backend)** - **[Full Demo Video (YouTube)](#)**
+| Done | Planned |
+|---|---|
+| JWT login + MFA via SMS | Register + email verification |
+| Token interceptor (auto-attach + 401 refresh) | Password reset via email |
+| Logout | Account activity log |
+| User profile — update info | Update avatar |
+| Dashboard stats overview | Stats charts |
+| Customer list with search + pagination | Excel export |
+| Add / manage customers | Sortable columns |
+| Customer status badges | Form validation |
+| Invoice list with pagination | Excel export |
+| Create new invoices | |
+| Download invoice as PDF | |
 
-## Demo
+---
 
-**[Watch the full demo video on YouTube](#)**
+## The TechBridge Story
 
-<!-- TODO: add vercel link and explanation railway for the backend may pause after some time -->
+TechBridge is a non-profit that coordinates device donations from businesses to students in need. It connects three types of partner organisations — each with a financial relationship with TechBridge that needs to be tracked:
 
-<!-- TODO: add demo GIF from /demo folder once recorded -->
+| Partner Type | Who they are | Why TechBridge invoices them |
+|---|---|---|
+| **Business Donor** | Companies donating end-of-life devices (e.g. Optus, Telstra) | Annual membership fee + tax receipt package |
+| **Refurb Partner** | IT recyclers who wipe and refurbish devices | Annual verified partner listing fee |
+| **Request Partner** | Schools and NGOs receiving devices | Annual registration fee to submit device requests |
 
+TechBridge Invoice gives program admins a single place to manage these partner organisations, issue invoices, track payment status, and export financial records for compliance reporting.
 
-## Table of Contents
-- [Tech Stack](#tech-stack)
-- [Business Requirements](#business-requirements)
-- [Features](#features)
-- [User Scenarios](#user-scenarios)
-- [Architecture](#architecture)
-- [Login Flow](#login-flow)
-- [Engineering Highlights](#engineering-highlights)
-- [Getting Started (Frontend)](#getting-started-frontend)
-- [Getting Started (Backend)](#getting-started-backend)
-- [Deployment](#deployment)
-- [What's Next](#whats-next)
+**Roles:** `ROLE_USER` (view) → `ROLE_MANAGER` (view + update) → `ROLE_ADMIN` (full except delete) → `ROLE_SYSADMIN` (full). Full permission table in [docs/NOTES.md](docs/NOTES.md).
+
+---
 
 ## Tech Stack
 
@@ -42,108 +48,28 @@ In the TechBridge platform, admins coordinate with organisations (donors, refurb
 | Backend | Spring Boot 4.0.2 (Java 17), Spring Security, Lombok |
 | Auth | JWT (auth0 java-jwt), Twilio MFA/SMS |
 | Database | MySQL 8.0 |
-| Frontend Deploy | Vercel |
-| Backend + DB Deploy | Railway |
+| Deploy | Vercel (frontend), Railway (backend + DB) |
 
-## Business Requirements
-
-The features below are created from a mock business requirements document - written to demonstrate what real requirements gathering looks like before building a system.
-
-**Users**
-- New account with unique email and email verification
-- User profile with image, name, position, bio, phone, address
-- Update profile information
-- Password reset via email link (expires in 24 hours)
-- JWT-based login with token refresh
-- Brute force protection (account lock after 6 failed attempts)
-- Role and permission-based access control (ACL)
-- Two-factor authentication via SMS
-- Activity tracking (IP, device, browser, date, action type)
-
-**Customers**
-- Manage customer info (name, address, status)
-- Customer can be a person or an institution
-- Search by name with pagination
-- Export customer list to spreadsheet
-
-**Invoices**
-- Create and attach invoices to customers
-- Download invoices as PDF
-- Export invoices to spreadsheet
-
-## Features
-
-These show what's actually built so far in this project.
-
-**Auth and Users**
-
-- [Done] Login with JWT + MFA via SMS (Twilio)
-- [Done] JWT token interceptor (auto-attach + refresh on 401)
-- [Done] Logout
-- [Done] User profile - update info
-- [Plannedd] Register new account
-- [Planned] Email verification on signup
-- [Planned] User profile - update password
-- [Planned] Account activity log
-- [Planned] Password reset via email
-- [Planned] Brute force protection (account lock)
-- [Planned] Role and permission-based access control (ACL)
-- [Planned] User profile - update avatar
-
-> Note: MFA via SMS (Twilio) is implemented from the tutorial but will be removed before the public demo. Visitors should not need to share their phone number to try the app.
-
-**Customers**
-
-- [Done] Dashboard stats overview
-- [Done] Add and manage customers
-- [Done] Customer status badges (Active, Inactive, Pending)
-- [Done] Search customers by name
-- [Done] Pagination
-- [Planned] Excel export for customer lists
-
-**Invoices**
-
-- [Done] Create new invoices
-- [Done] Add invoices to a customer
-- [Done] Download invoice as PDF (via window.print())
-- [Done] Pagination
-- [Planned] Excel export for invoice lists
-
-## User Scenarios
-
-### Admin (in progress)
-
-> As an admin, I can log in with JWT, view the dashboard, update my profile, and work through customers and invoices as features are completed.
-
-### Standard User (planned)
-
-> As a standard user, I can view assigned customers and invoices based on my role permissions.
+---
 
 ## Architecture
 
-The app follows a clean client-server split. Docker is used locally for the database only - the frontend deploys directly to Vercel and the backend directly to Railway.
-
-**Frontend (Angular)**
-
-The browser sends user events to Angular components. Components delegate all data fetching to a Service Layer (CustomerService, UserService). Services pass through HTTP Interceptors, which automatically attach the JWT access token before any request leaves the browser. Responses are cached in memory where applicable. Invoice PDF export uses `window.print()`.
+**Frontend**
 
 ```
 Browser
   └── Angular Components
       └── Services (CustomerService, UserService)
           └── HTTP Interceptors (attach JWT, handle 401 refresh)
-              └── Cache (in-memory)
-                  └── HTTP Request to Backend
+              └── HTTP Request to Backend
 ```
 
-**Backend (Spring Boot)**
-
-Every HTTP request passes through the Spring Security filter chain before reaching any controller. The filters validate the JWT, check permissions, and reject unauthorised requests early. Requests then hit the Resource layer (REST controllers), the Service layer, then Repositories (JPA + JDBC) which talk to MySQL. Email verification (Office365 API) is planned but not yet complete. SMS verification via Twilio is implemented but planned for removal. Excel report generation via Apache POI is planned but not yet built.
+**Backend**
 
 ```
 HTTP Request
   └── Spring Security Filters (JWT validation, permission check)
-      └── Resources (REST Controllers)
+      └── REST Controllers
           └── Services
               └── Repositories (JPA + JDBC)
                   └── MySQL DB
@@ -151,67 +77,64 @@ HTTP Request
 
 **Infrastructure**
 
-Locally, MySQL runs in a Docker container. In production, the backend deploys to Railway with MySQL as a managed Railway database.
-
 ```
-Local
-  └── Docker
-      └── MySQL Container
-
-Production
-  └── Vercel (Frontend)
-  └── Railway (Backend + MySQL DB)
+Local:       Docker → MySQL Container
+Production:  Vercel (Frontend) + Railway (Backend + MySQL)
 ```
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for deeper system design notes.
+
+---
 
 ## Login Flow
-
-Login uses a two-token system: a short-lived access token and a longer-lived refresh token, both JWT.
 
 ```
 User submits credentials
   └── Backend validates email + password
-      └── If MFA enabled: Twilio sends SMS code to phone
+      └── If MFA enabled: Twilio sends SMS code
           └── User submits SMS code
               └── Backend issues Access Token + Refresh Token
-                  └── Angular stores both tokens in local storage
+                  └── Angular stores both in localStorage
                       └── Token Interceptor attaches Access Token to every request
-                          └── On 401 (expired): Interceptor silently uses Refresh Token to get a new Access Token
+                          └── On 401: Interceptor silently refreshes → retries original request
 ```
 
-On the backend, Spring Security routes login through `UsernamePasswordAuthenticationFilter` > `ProviderManager` > `DaoAuthenticationProvider` > `UserDetailsService`, which loads the user from the database. A custom `CustomAuthorizationFilter` validates the JWT on every protected request.
+On the backend, Spring Security routes login through `UsernamePasswordAuthenticationFilter` → `DaoAuthenticationProvider` → `UserDetailsService`. A custom `CustomAuthorizationFilter` validates the JWT on every protected request.
+
+---
 
 ## Engineering Highlights
 
-These are patterns applied deliberately, not just to make things work.
-
 **Type Safety**
-- Generic HTTP response wrapper - `CustomHttpResponse<T>` gives every API response a consistent typed shape
-- State machine via enum - `DataState { LOADING, LOADED, ERROR }` makes every possible UI state explicit and exhaustive
-- Enum constants over magic strings - `Key.TOKEN = '[KEY] TOKEN'` prevents typos in local storage keys
+- `CustomHttpResponse<T>` — generic wrapper gives every API response a consistent typed shape
+- `DataState { LOADING, LOADED, ERROR }` — state machine enum makes every UI state explicit and exhaustive
+- `Key.TOKEN` enum constants — prevents typos in localStorage keys
 
-**Architecture and Separation of Concerns**
-- HTTP Interceptor as a cross-cutting concern - JWT injection and 401 token refresh happen in one place; no component needs to know about auth
-- Route Guard - `authentication-guard.ts` centralises all auth checks; protected pages don't manage their own access logic
-- Shell Layout Pattern - `shell.ts` wraps all authenticated routes in a single layout (navbar + router-outlet), so the navbar isn't duplicated across every page
-- Standalone Component Architecture - each component declares its own imports with no shared NgModule, keeping dependencies explicit and tree-shakeable
-- Functional Interceptor (`HttpInterceptorFn`) - uses `inject()` inside a plain function, the modern Angular pattern that avoids class boilerplate
+**Architecture**
+- HTTP Interceptor — JWT injection and 401 refresh in one place; no component handles auth
+- Route Guard — `authentication-guard.ts` centralises all access control
+- Shell Layout Pattern — `shell.ts` wraps all authenticated routes (navbar + router-outlet) once, not per page
+- Standalone Components — each component declares its own imports; no shared NgModule
+- Functional Interceptor (`HttpInterceptorFn`) — uses `inject()` in a plain function, avoiding class boilerplate
 
-**Reactive Programming (RxJS)**
-- Observable pipeline composition - `.pipe(map, catchError, startWith)` chains keep async logic declarative and readable
-- `switchMap` for dependent observables - route param changes cancel in-flight API requests automatically
-- `startWith` for initial state - guarantees a loading state emission before the HTTP call resolves, no blank flashes
+**RxJS**
+- `.pipe(map, catchError, startWith)` — keeps async logic declarative and readable
+- `switchMap` — route param changes cancel in-flight requests automatically
+- `startWith` — guarantees a loading state before the HTTP call resolves; no blank flashes
 
 **State Management**
-- Angular Signals for local UI state - `currentPage = signal<number>(0)` is reactive without needing RxJS for simple values
-- Retain stale data during pagination - `startWith({ dataState: LOADED, appData: this.data() })` shows the previous page while the next one loads
-- Immutable updates with spread - `{ ...response, data: { ...response.data } }` preserves unchanged state fields instead of mutating
+- Angular Signals — `currentPage = signal<number>(0)` for simple local UI state without RxJS overhead
+- Stale-while-loading — `startWith({ dataState: LOADED, appData: this.data() })` shows the previous page while the next loads
+- Immutable updates — `{ ...response, data: { ...response.data } }` preserves unchanged state fields
 
-**DRY and Code Quality**
-- Centralised error handler - `private handleError(error: HttpErrorResponse)` in `user.ts` is reused by every service method
-- Environment-based API URL - `environment.apiUrl` means one change switches between dev and prod
-- Nested route hierarchy with guards - protected routes are children of `ShellComponent` in `app.routes.ts`, so the guard is applied once, not per route
+**Code Quality**
+- Centralised `handleError` reused across all service methods
+- `environment.apiUrl` — one change switches between dev and prod
+- Guards applied once at the shell level, not duplicated per route
 
-## Getting Started (Frontend)
+---
+
+## Getting Started
 
 **Prerequisites:** Node.js 20+, Angular CLI 21
 
@@ -222,48 +145,30 @@ npm install
 ng serve
 ```
 
-The app runs at `http://localhost:4200`. You'll need the backend running locally or pointed at a deployed instance via `src/environments/environment.ts`.
+Opens at `http://localhost:4200`. Point `src/environments/environment.ts` at a local or deployed backend.
 
-> Full backend setup (including IntelliJ environment variables and local Docker config) is in the backend repo's README.
+> Backend setup (IntelliJ env vars, Docker DB config) is in the [backend repo](https://github.com/ting11222001/TechBridge-Invoice).
 
-## Getting Started (Backend)
+**Demo credentials** (MFA disabled):
 
-Go checkout the backend repo [here.](https://github.com/ting11222001/TechBridge-Invoice)
+```
+admin@gmail.com   /  Demo@2026
+tiffany@gmail.com /  123456
+```
 
-## Deployment
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for full Railway + Vercel setup and DB seeding.
 
-| Service | Platform |
-|---|---|
-| Frontend | Vercel (auto-deploy from `main`) |
-| Backend | Railway |
-| Database | Railway (MySQL managed) |
-
-Full deployment notes (including Railway DB seeding) coming soon. The information about setting up the backend project is in the backend repo's README.
+---
 
 ## What's Next
 
-**Features to add**
-
-- [ ] Sortable table columns
-- [ ] Form input validation
-- [ ] Stats charts on the dashboard
-
-**Frontend refactors**
-
-- [ ] Refactor all possible signals in components
-- [ ] Use Reactive Forms instead of `ngForm`
-- [ ] Build simple reusable UI components
-- [ ] Replace mock images with real Cloudinary integration
-- [ ] Seed database with more appropriate mock data
-
-**Backend improvements**
-
-- [ ] Set up GitHub Actions CI/CD pipeline
-- [ ] Remove Twilio SMS dependency (simplify auth for demo)
-- [ ] Add database indexing for better query performance
-- [ ] Explore gRPC or jOOQ
-
-**Infrastructure**
-
-- [ ] Full Vercel + Railway deployment with DB seeding docs
-- [ ] Explore low-cost AWS deployment
+- [ ] Sortable table columns + form validation
+- [ ] Stats charts on dashboard
+- [ ] Reactive Forms (replace `ngForm`)
+- [ ] Refactor components to Angular Signals
+- [ ] Cloudinary avatar upload + real mock data seeding
+- [ ] Remove Twilio SMS dependency (simplify demo auth)
+- [ ] GitHub Actions CI/CD pipeline
+- [ ] Full Vercel + Railway deployment docs with DB seeding
+- [ ] Database indexing for query performance
+- [ ] Explore gRPC or jOOQ on the backend
