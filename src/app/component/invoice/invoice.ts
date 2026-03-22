@@ -7,7 +7,6 @@ import { State } from '../../interface/state';
 import { CustomHttpResponse, GetInvoiceResponse } from '../../interface/appstates';
 import { CustomerService } from '../../service/customer';
 import { DataState } from '../../enum/datastate.enum';
-import { jsPDF } from "jspdf";
 
 @Component({
   selector: 'app-invoice',
@@ -56,19 +55,6 @@ export class InvoiceComponent implements OnInit {
   }
 
   exportAsPDF(): void {
-    // const inv = this.data()?.data?.invoice;
-    // const fileName = `techBridge-invoice-${inv?.invoiceNumber ?? 'unknown'}.pdf`;
-    // const element = document.getElementById('invoice')!;
-
-    // const pdf = new jsPDF();
-
-    // pdf.html(element, {
-    //   margin: 5,
-    //   width: 200,                       // 210 (A4 width in mm) - 5 (left margin) - 5 (right margin); tells jsPDF "fit whatever canvas you got into 200mm on the page". jsPDF will scale the canvas up or down to hit width: 200mm regardless of what the canvas pixel width is.
-    //   windowWidth: element.scrollWidth, // tells html2canvas "pretend the viewport is this wide when taking the screenshot"
-    //   autoPaging: false,
-    //   callback: (doc) => doc.save(fileName),
-    // });
     window.print();
   }
 }
