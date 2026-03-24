@@ -1,6 +1,6 @@
 # TechBridge Invoice
 
-> Full-stack invoicing module for a technology donation non-profit. Internal staff accounts are managed with role-based access control — admins can create and update records, coordinators can view and update, assistants are read-only. Built with Angular, Spring Boot, and JWT auth.
+> Full-stack invoicing module for a technology donation non-profit. Internal staff accounts are managed with role-based access control: admins can create and update records, coordinators can view and update, assistants are read-only. Built with Angular, Spring Boot, and JWT auth.
 
 [Live Demo (in progress)](#) · [Backend Repo](https://github.com/ting11222001/TechBridge-Invoice) · [Demo Video (in progress)](#)
 
@@ -16,13 +16,14 @@
 - [Login Flow](#login-flow)
 - [Engineering Highlights](#engineering-highlights)
 - [Getting Started](#getting-started)
+- [Docs](#docs)
 - [What's Next](#whats-next)
 
 <!-- --- -->
 
 ## Demo
 
-![Demo GIF](Demo/demo.gif)
+![Demo GIF](demo/demo.gif)
 
 <!-- --- -->
 
@@ -33,7 +34,7 @@
 | JWT login + MFA via SMS | Register + email verification |
 | Token interceptor (auto-attach + 401 refresh) | Password reset via email |
 | Logout | Account activity log |
-| User profile — update info | Update avatar |
+| User profile: update info | Update avatar |
 | Dashboard stats overview | Stats charts |
 | Customer list with search + pagination | Excel export |
 | Add / manage customers | Sortable columns |
@@ -46,7 +47,7 @@
 
 ## The TechBridge Story
 
-TechBridge is a non-profit that coordinates device donations from businesses to students in need. It connects three types of partner organisations — each with a financial relationship with TechBridge that needs to be tracked:
+TechBridge is a non-profit that coordinates device donations from businesses to students in need. It connects three types of partner organisations, each with a financial relationship with TechBridge that needs to be tracked:
 
 | Partner Type | Who they are | Why TechBridge invoices them |
 |---|---|---|
@@ -54,11 +55,12 @@ TechBridge is a non-profit that coordinates device donations from businesses to 
 | **Refurb Partner** | IT recyclers who wipe and refurbish devices | Annual verified partner listing fee |
 | **Request Partner** | Schools and NGOs receiving devices | Annual registration fee to submit device requests |
 
+
 TechBridge Invoice gives program admins a single place to manage these partner organisations, issue invoices, track payment status, and export financial records for compliance reporting.
 
 **Roles:** `ROLE_USER` (view) → `ROLE_MANAGER` (view + update) → `ROLE_ADMIN` (full except delete) → `ROLE_SYSADMIN` (full). Full permission table in [docs/NOTES.md](docs/NOTES.md).
 
-> This project explores the invoicing module as a focused standalone build. The full TechBridge platform — device lifecycle, donor/partner portals, allocation tracking — is being built separately with ASP.NET Core + React, informed by the patterns learned here.
+> This project explores the invoicing module as a focused standalone build. The full TechBridge platform (device lifecycle, donor/partner portals, allocation tracking) is being built separately with ASP.NET Core + React, informed by the patterns learned here.
 
 <!-- --- -->
 
@@ -128,30 +130,30 @@ On the backend, Spring Security routes login through `UsernamePasswordAuthentica
 ## Engineering Highlights
 
 **Type Safety**
-- `CustomHttpResponse<T>` — generic wrapper gives every API response a consistent typed shape
-- `DataState { LOADING, LOADED, ERROR }` — state machine enum makes every UI state explicit and exhaustive
-- `Key.TOKEN` enum constants — prevents typos in localStorage keys
+- `CustomHttpResponse<T>` - generic wrapper gives every API response a consistent typed shape
+- `DataState { LOADING, LOADED, ERROR }` - state machine enum makes every UI state explicit and exhaustive
+- `Key.TOKEN` enum constants - prevents typos in localStorage keys
 
 **Architecture**
-- HTTP Interceptor — JWT injection and 401 refresh in one place; no component handles auth
-- Route Guard — `authentication-guard.ts` centralises all access control
-- Shell Layout Pattern — `shell.ts` wraps all authenticated routes (navbar + router-outlet) once, not per page
-- Standalone Components — each component declares its own imports; no shared NgModule
-- Functional Interceptor (`HttpInterceptorFn`) — uses `inject()` in a plain function, avoiding class boilerplate
+- HTTP Interceptor - JWT injection and 401 refresh in one place; no component handles auth
+- Route Guard - `authentication-guard.ts` centralises all access control
+- Shell Layout Pattern - `shell.ts` wraps all authenticated routes (navbar + router-outlet) once, not per page
+- Standalone Components - each component declares its own imports; no shared NgModule
+- Functional Interceptor (`HttpInterceptorFn`) - uses `inject()` in a plain function, avoiding class boilerplate
 
 **RxJS**
-- `.pipe(map, catchError, startWith)` — keeps async logic declarative and readable
-- `switchMap` — route param changes cancel in-flight requests automatically
-- `startWith` — guarantees a loading state before the HTTP call resolves; no blank flashes
+- `.pipe(map, catchError, startWith)` - keeps async logic declarative and readable
+- `switchMap` - route param changes cancel in-flight requests automatically
+- `startWith` - guarantees a loading state before the HTTP call resolves; no blank flashes
 
 **State Management**
-- Angular Signals — `currentPage = signal<number>(0)` for simple local UI state without RxJS overhead
-- Stale-while-loading — `startWith({ dataState: LOADED, appData: this.data() })` shows the previous page while the next loads
-- Immutable updates — `{ ...response, data: { ...response.data } }` preserves unchanged state fields
+- Angular Signals - `currentPage = signal<number>(0)` for simple local UI state without RxJS overhead
+- Stale-while-loading - `startWith({ dataState: LOADED, appData: this.data() })` shows the previous page while the next loads
+- Immutable updates - `{ ...response, data: { ...response.data } }` preserves unchanged state fields
 
 **Code Quality**
 - Centralised `handleError` reused across all service methods
-- `environment.apiUrl` — one change switches between dev and prod
+- `environment.apiUrl` - one change switches between dev and prod
 - Guards applied once at the shell level, not duplicated per route
 
 <!-- --- -->
@@ -179,6 +181,14 @@ tiffany@gmail.com /  123456
 ```
 
 See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for full Railway + Vercel setup and DB seeding.
+
+<!-- --- -->
+
+## Docs
+
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) - system design, component structure, and data flow
+- [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) - Railway + Vercel setup, environment variables, and DB seeding
+- [docs/NOTES.md](docs/NOTES.md) - role/permission table and dev notes
 
 <!-- --- -->
 
