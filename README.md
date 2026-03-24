@@ -29,7 +29,7 @@
 ## What's Built
 
 | Done | Planned |
-|<!-- --- -->|<!-- --- -->|
+|---|---|
 | JWT login + MFA via SMS | Register + email verification |
 | Token interceptor (auto-attach + 401 refresh) | Password reset via email |
 | Logout | Account activity log |
@@ -49,7 +49,7 @@
 TechBridge is a non-profit that coordinates device donations from businesses to students in need. It connects three types of partner organisations — each with a financial relationship with TechBridge that needs to be tracked:
 
 | Partner Type | Who they are | Why TechBridge invoices them |
-|<!-- --- -->|<!-- --- -->|<!-- --- -->|
+|---|---|---|
 | **Business Donor** | Companies donating end-of-life devices (e.g. Optus, Telstra) | Annual membership fee + tax receipt package |
 | **Refurb Partner** | IT recyclers who wipe and refurbish devices | Annual verified partner listing fee |
 | **Request Partner** | Schools and NGOs receiving devices | Annual registration fee to submit device requests |
@@ -65,7 +65,7 @@ TechBridge Invoice gives program admins a single place to manage these partner o
 ## Tech Stack
 
 | Layer | Technology |
-|<!-- --- -->|<!-- --- -->|
+|---|---|
 | Frontend | Angular 21, Tailwind CSS 4 |
 | Backend | Spring Boot 4.0.2 (Java 17), Spring Security, Lombok |
 | Auth | JWT (auth0 java-jwt), Twilio MFA/SMS |
@@ -184,13 +184,15 @@ See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for full Railway + Vercel setup and
 
 ## What's Next
 
-- [ ] Sortable table columns + form validation
-- [ ] Stats charts on dashboard
-- [ ] Reactive Forms (replace `ngForm`)
-- [ ] Refactor components to Angular Signals
-- [ ] Cloudinary avatar upload + real mock data seeding
-- [ ] Remove Twilio SMS dependency (simplify demo auth)
-- [ ] GitHub Actions CI/CD pipeline
-- [ ] Full Vercel + Railway deployment docs with DB seeding
-- [ ] Database indexing for query performance
-- [ ] Explore gRPC or jOOQ on the backend
+| Done | Planned |
+|---|---|
+| | Sortable table columns + form validation |
+| | Stats charts on dashboard |
+| | Reactive Forms (replace `ngForm`) |
+| | Refactor components to Angular Signals |
+| | Cloudinary avatar upload + real mock data seeding |
+| | Remove Twilio SMS dependency (simplify demo auth) |
+| | GitHub Actions CI/CD pipeline |
+| | Full Vercel + Railway deployment docs with DB seeding |
+| | Database indexing for query performance |
+| | Explore gRPC or jOOQ on the backend |
