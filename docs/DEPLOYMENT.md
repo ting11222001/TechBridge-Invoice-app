@@ -22,7 +22,7 @@ Setup notes for Railway (backend + DB) and Vercel (frontend).
    ```
    ng build --configuration production
    ```
-4. Set output directory: `dist/<project-name>/browser`
+4. Set root directory: `./`
 5. No environment variables needed — the production API URL is baked into `environment.prod.ts`
 
 ### How environment switching works

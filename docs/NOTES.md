@@ -8,8 +8,8 @@ Personal reference notes, planning decisions, and terminology for TechBridge Inv
 
 | Term | Meaning |
 |---|---|
-| `USER` | A TechBridge staff account — the people logging into this app (admins, coordinators, assistants) |
-| `CUSTOMER` | A partner organisation being invoiced — Business Donors, Refurb Partners, or Request Partners |
+| `USER` | A TechBridge staff account, the people logging into this app (admins, coordinators, assistants) |
+| `CUSTOMER` | A partner organisation being invoiced, Business Donors, Refurb Partners, or Request Partners |
 
 > **Users** are internal staff who log in and use the app.
 > **Customers** are the external partner organisations you manage and invoice.
@@ -40,18 +40,18 @@ Full permission set per role:
 
 | Partner Type | Example Invoice Services | Typical Amount |
 |---|---|---|
-| **Business Donor** | Annual partner membership | $500 |
-| **Business Donor** | Donation impact report + tax receipt package | $150 |
+| **Business Donor** | Annual corporate partner program membership (includes listing + impact reporting) | $500 |
+| **Business Donor** | Cost-recovery charge: donation documentation + tax receipt package | $150 |
 | **Refurb Partner** | Annual verified partner listing fee | $300 |
 | **Refurb Partner** | Platform onboarding and compliance check | $200 |
-| **Request Partner** | Annual school/NGO registration fee | $100 |
-| **Request Partner** | Device request processing fee | $75 |
+| **Request Partner** | Annual contribution: eligibility assessment and registration | $100 |
+| **Request Partner** | Annual contribution: device request processing | $75 |
 
 ---
 
 ## Business Requirements (Source of Truth)
 
-Features derived from a mock business requirements document — written to demonstrate what real requirements gathering looks like before building a system.
+Features derived from a mock business requirements document, written to demonstrate what real requirements gathering looks like before building a system.
 
 **Users**
 - New account with unique email and email verification
@@ -151,7 +151,7 @@ catchError(401)
 
 ### JwtHelperService
 
-Used for small UI conveniences only — not for real security. The backend controls actual security.
+Used for small UI conveniences only, not for real security. The backend controls actual security.
 
 Install: `npm i @auth0/angular-jwt` (https://www.npmjs.com/package/@auth0/angular-jwt)
 
@@ -160,7 +160,7 @@ Use cases:
 - Navbar state
 - Route guards
 
-`JwtHelperService._isTokenExpired` treats a missing token as expired — source: https://github.com/auth0/angular2-jwt
+`JwtHelperService._isTokenExpired` treats a missing token as expired, source: https://github.com/auth0/angular2-jwt
 
 **Architecture rule:**
 - Use `JwtHelperService` only for route guards / UI

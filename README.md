@@ -2,15 +2,17 @@
 
 > Full-stack invoicing module for a technology donation non-profit. Internal staff accounts are managed with role-based access control: admins can create and update records, coordinators can view and update, assistants are read-only. Built with Angular, Spring Boot, and JWT auth.
 
-[Live Demo (in progress)](#) · [Backend Repo](https://github.com/ting11222001/TechBridge-Invoice) · [Demo Video (in progress)](#)
+[Live Demo (in progress)](#) · [Demo Video (in progress)](#) · [Backend Repo](https://github.com/ting11222001/TechBridge-Invoice) · [TechBridge Full Platform (in progress)](#)
 
 <!-- --- -->
 
 ## Table of Contents
 
 - [Demo](#demo)
-- [What's Built](#whats-built)
 - [The TechBridge Story](#the-techbridge-story)
+- [What's Built](#whats-built)
+- [Roles](#roles)
+- [Example Invoice Services](#example-invoice-services)
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
 - [Login Flow](#login-flow)
@@ -24,6 +26,22 @@
 ## Demo
 
 ![Demo GIF](demo/demo.gif)
+
+<!-- --- -->
+
+## The TechBridge Story
+
+TechBridge is a non-profit that coordinates device donations from businesses to students in need. It connects three types of partner organisations, each with a financial relationship with TechBridge that needs to be tracked:
+
+| Partner Type | Who they are | Why TechBridge invoices them |
+|---|---|---|
+| **Business Donor** | Companies donating end-of-life devices (e.g. Optus, Telstra) | Annual corporate partner program membership (includes listing + impact reporting) + cost-recovery charge for donation documentation and tax receipt package |
+| **Refurb Partner** | IT recyclers who wipe and refurbish devices | Annual verified partner listing fee |
+| **Request Partner** | Schools and NGOs receiving devices | Small contribution to cover eligibility assessment and admin costs |
+
+TechBridge Invoice gives program admins a single place to manage these partner organisations, issue invoices, track payment status, and export financial records for compliance reporting.
+
+> This project explores the invoicing module as a focused standalone build. The full TechBridge platform (device lifecycle, donor/partner portals, allocation tracking) is being built separately with ASP.NET Core + React, informed by the patterns learned here.
 
 <!-- --- -->
 
@@ -45,22 +63,22 @@
 
 <!-- --- -->
 
-## The TechBridge Story
+## Roles
 
-TechBridge is a non-profit that coordinates device donations from businesses to students in need. It connects three types of partner organisations, each with a financial relationship with TechBridge that needs to be tracked:
+Internal staff have four access levels: Program Assistant (view only) → Program Coordinator (view + update) → Program Admin (full except delete) → Platform Owner (full access). See [docs/NOTES.md](docs/NOTES.md) for the full permission table.
 
-| Partner Type | Who they are | Why TechBridge invoices them |
+<!-- --- -->
+
+## Example Invoice Services
+
+| Partner Type | Example Invoice Services | Typical Amount |
 |---|---|---|
-| **Business Donor** | Companies donating end-of-life devices (e.g. Optus, Telstra) | Annual membership fee + tax receipt package |
-| **Refurb Partner** | IT recyclers who wipe and refurbish devices | Annual verified partner listing fee |
-| **Request Partner** | Schools and NGOs receiving devices | Annual registration fee to submit device requests |
-
-
-TechBridge Invoice gives program admins a single place to manage these partner organisations, issue invoices, track payment status, and export financial records for compliance reporting.
-
-**Roles:** `ROLE_USER` (view) → `ROLE_MANAGER` (view + update) → `ROLE_ADMIN` (full except delete) → `ROLE_SYSADMIN` (full). Full permission table in [docs/NOTES.md](docs/NOTES.md).
-
-> This project explores the invoicing module as a focused standalone build. The full TechBridge platform (device lifecycle, donor/partner portals, allocation tracking) is being built separately with ASP.NET Core + React, informed by the patterns learned here.
+| **Business Donor** | Annual corporate partner program membership (includes listing + impact reporting) | $500 |
+| **Business Donor** | Cost-recovery charge: donation documentation + tax receipt package | $150 |
+| **Refurb Partner** | Annual verified partner listing fee | $300 |
+| **Refurb Partner** | Platform onboarding and compliance check | $200 |
+| **Request Partner** | Annual contribution: eligibility assessment and registration | $100 |
+| **Request Partner** | Annual contribution: device request processing | $75 |
 
 <!-- --- -->
 
