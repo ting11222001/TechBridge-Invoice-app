@@ -1,31 +1,29 @@
 # TechBridge Invoice
 
-> Full-stack invoicing module for a technology donation non-profit. Internal staff accounts are managed with role-based access control: admins can create and update records, coordinators can view and update, assistants are read-only. Built with Angular, Spring Boot, and JWT auth.
+TechBridge connects businesses donating old devices to schools and NGOs who need them. This app gives program staff a place to manage partner organisations, issue invoices, and track payments across three partner types, each with a different billing relationship. Built with Angular, Spring Boot, and JWT auth, with role-based access so admins, coordinators, and assistants each see only what they need.
 
 [Live Demo (in progress)](#) · [Demo Video (in progress)](#) · [Backend Repo](https://github.com/ting11222001/TechBridge-Invoice) · [TechBridge Full Platform (in progress)](#)
-
-<!-- --- -->
-
-## Table of Contents
-
-- [Demo](#demo)
-- [The TechBridge Story](#the-techbridge-story)
-- [What's Built](#whats-built)
-- [Roles](#roles)
-- [Example Invoice Services](#example-invoice-services)
-- [Tech Stack](#tech-stack)
-- [Architecture](#architecture)
-- [Login Flow](#login-flow)
-- [Engineering Highlights](#engineering-highlights)
-- [Getting Started](#getting-started)
-- [Docs](#docs)
-- [What's Next](#whats-next)
 
 <!-- --- -->
 
 ## Demo
 
 ![Demo GIF](demo/demo.gif)
+
+<!-- --- -->
+
+## Table of Contents
+
+- [The TechBridge Story](#the-techbridge-story)
+- [Roles](#roles)
+- [Example Invoice Services](#example-invoice-services)
+- [What's Built](#whats-built)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Engineering Highlights](#engineering-highlights)
+- [Getting Started](#getting-started)
+- [Docs](#docs)
+- [What's Next](#whats-next)
 
 <!-- --- -->
 
@@ -41,7 +39,42 @@ TechBridge is a non-profit that coordinates device donations from businesses to 
 
 TechBridge Invoice gives program admins a single place to manage these partner organisations, issue invoices, track payment status, and export financial records for compliance reporting.
 
-> This project explores the invoicing module as a focused standalone build. The full TechBridge platform (device lifecycle, donor/partner portals, allocation tracking) is being built separately with ASP.NET Core + React, informed by the patterns learned here.
+> This project explores the invoicing module as a focused standalone build. The full TechBridge platform (device lifecycle, donor/partner portals, allocation tracking) is planned to be built separately with ASP.NET Core + React.
+
+<!-- --- -->
+
+## Users of this Invoice platform
+
+| Term | Meaning |
+|---|---|
+| `USER` | A TechBridge staff account, the people logging into this app (admins, coordinators, assistants) |
+| `CUSTOMER` | A partner organisation being invoiced, Business Donors, Refurb Partners, or Request Partners |
+
+> **Users** are internal staff who log in and use the app.
+> **Customers** are the external partner organisations you manage and invoice.
+
+Internal staff have four access levels: Program Assistant (view only) → Program Coordinator (view + update) → Program Admin (full except delete) → Platform Owner (full access). See [docs/NOTES.md/##Role and Permission Reference](docs/NOTES.md) for the full permission table.
+
+| Role | Who they are | What they can do |
+|---|---|---|
+| `ROLE_USER` | Program Assistant | View staff accounts and partner organisations |
+| `ROLE_MANAGER` | Program Coordinator | View and update staff accounts and partner organisations |
+| `ROLE_ADMIN` | Program Admin | Full access except delete |
+| `ROLE_SYSADMIN` | Platform Owner | Full access including delete |
+
+
+<!-- --- -->
+
+## Example Invoice Services
+
+| Partner Type | Example Invoice Services | Typical Amount |
+|---|---|---|
+| **Business Donor** | Annual corporate partner program membership (includes listing + impact reporting) | $500 |
+| **Business Donor** | Cost-recovery charge: donation documentation + tax receipt package | $150 |
+| **Refurb Partner** | Annual verified partner listing fee | $300 |
+| **Refurb Partner** | Platform onboarding and compliance check | $200 |
+| **Request Partner** | Annual contribution: eligibility assessment and registration | $100 |
+| **Request Partner** | Annual contribution: device request processing | $75 |
 
 <!-- --- -->
 
@@ -60,25 +93,6 @@ TechBridge Invoice gives program admins a single place to manage these partner o
 | Invoice list with pagination | Excel export |
 | Create new invoices | |
 | Download invoice as PDF | |
-
-<!-- --- -->
-
-## Roles
-
-Internal staff have four access levels: Program Assistant (view only) → Program Coordinator (view + update) → Program Admin (full except delete) → Platform Owner (full access). See [docs/NOTES.md](docs/NOTES.md) for the full permission table.
-
-<!-- --- -->
-
-## Example Invoice Services
-
-| Partner Type | Example Invoice Services | Typical Amount |
-|---|---|---|
-| **Business Donor** | Annual corporate partner program membership (includes listing + impact reporting) | $500 |
-| **Business Donor** | Cost-recovery charge: donation documentation + tax receipt package | $150 |
-| **Refurb Partner** | Annual verified partner listing fee | $300 |
-| **Refurb Partner** | Platform onboarding and compliance check | $200 |
-| **Request Partner** | Annual contribution: eligibility assessment and registration | $100 |
-| **Request Partner** | Annual contribution: device request processing | $75 |
 
 <!-- --- -->
 
@@ -125,23 +139,6 @@ Production:  Vercel (Frontend) + Railway (Backend + MySQL)
 ```
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for deeper system design notes.
-
-<!-- --- -->
-
-## Login Flow
-
-```
-User submits credentials
-  └── Backend validates email + password
-      └── If MFA enabled: Twilio sends SMS code
-          └── User submits SMS code
-              └── Backend issues Access Token + Refresh Token
-                  └── Angular stores both in localStorage
-                      └── Token Interceptor attaches Access Token to every request
-                          └── On 401: Interceptor silently refreshes → retries original request
-```
-
-On the backend, Spring Security routes login through `UsernamePasswordAuthenticationFilter` → `DaoAuthenticationProvider` → `UserDetailsService`. A custom `CustomAuthorizationFilter` validates the JWT on every protected request.
 
 <!-- --- -->
 

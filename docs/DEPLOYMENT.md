@@ -2,7 +2,7 @@
 
 Setup notes for Railway (backend + DB) and Vercel (frontend).
 
----
+<!-- --- -->
 
 ## Overview
 
@@ -12,9 +12,9 @@ Setup notes for Railway (backend + DB) and Vercel (frontend).
 | Backend | Railway | Manual or GitHub integration |
 | Database | Railway (MySQL managed) | Provisioned in Railway dashboard |
 
----
+<!-- --- -->
 
-## Frontend — Vercel
+## Frontend - Vercel
 
 1. Connect the GitHub repo to Vercel
 2. In Vercel project settings, choose **Production** as the deployment environment
@@ -23,7 +23,7 @@ Setup notes for Railway (backend + DB) and Vercel (frontend).
    ng build --configuration production
    ```
 4. Set root directory: `./`
-5. No environment variables needed — the production API URL is baked into `environment.prod.ts`
+5. No environment variables needed, the production API URL is baked into `environment.prod.ts`
 
 ### How environment switching works
 
@@ -65,16 +65,16 @@ Build behaviour:
 | `ng serve` or `ng build` | `environment.ts` → `http://localhost:8080` |
 | `ng build --configuration production` | `environment.prod.ts` → Railway URL |
 
----
+<!-- --- -->
 
-## Backend — Railway
+## Backend - Railway
 
 The project has two separate Railway services in the same Railway project:
 
-1. **MySQL service** — a Railway-managed MySQL instance
-2. **Spring Boot service** — deployed from GitHub (the backend repo), connected to the MySQL service
+1. **MySQL service** - a Railway-managed MySQL instance
+2. **Spring Boot service** - deployed from GitHub (the backend repo), connected to the MySQL service
 
-### Step 1 — Provision MySQL
+### Step 1 - Provision MySQL
 
 Add a MySQL service in Railway. Railway automatically sets these environment variables on the MySQL service:
 
@@ -92,14 +92,14 @@ MYSQLUSER
 
 `MYSQLHOST`, `MYSQLPORT`, `MYSQLDATABASE`, `MYSQLUSER`, and `MYSQLPASSWORD` are what you reference when configuring the Spring Boot service.
 
-### Step 2 — Deploy the Spring Boot Service
+### Step 2 - Deploy the Spring Boot Service
 
 Connect the [backend GitHub repo](https://github.com/ting11222001/TechBridge-Invoice) as a new Railway service. Railway will build and deploy it automatically on push to `main`.
 
 Set the following environment variables on the **Spring Boot service**:
 
 ```
-# Datasource — reference the MySQL service values
+# Datasource - reference the MySQL service values
 SPRING_DATASOURCE_URL=jdbc:mysql://${{MYSQLHOST}}:${{MYSQLPORT}}/${{MYSQLDATABASE}}
 SPRING_DATASOURCE_USERNAME=${{MYSQLUSER}}
 SPRING_DATASOURCE_PASSWORD=${{MYSQLPASSWORD}}
@@ -114,7 +114,7 @@ SPRING_PROFILES_ACTIVE=prod
 # SQL init
 SQL_INITIALISE_MODE=never
 
-# CORS — set to your Vercel frontend URL
+# CORS - set to your Vercel frontend URL
 ALLOWED_ORIGINS=https://<your-app>.vercel.app
 
 # JWT
@@ -126,9 +126,9 @@ TWILIO_AUTH_TOKEN=<token>
 TWILIO_FROM_NUMBER=<number>
 ```
 
-> Railway supports variable references with `${{SERVICE.VAR}}` syntax — use this to pull MySQL credentials directly from the MySQL service rather than copy-pasting values.
+> Railway supports variable references with `${{SERVICE.VAR}}` syntax - use this to pull MySQL credentials directly from the MySQL service rather than copy-pasting values.
 
----
+<!-- --- -->
 
 ## Database Seeding
 
@@ -148,7 +148,7 @@ admin@gmail.com   /  Demo@2026
 tiffany@gmail.com /  123456
 ```
 
----
+<!-- --- -->
 
 ## Local Development
 

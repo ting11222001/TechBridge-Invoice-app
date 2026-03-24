@@ -2,28 +2,7 @@
 
 Personal reference notes, planning decisions, and terminology for TechBridge Invoice.
 
----
-
-## Terminology
-
-| Term | Meaning |
-|---|---|
-| `USER` | A TechBridge staff account, the people logging into this app (admins, coordinators, assistants) |
-| `CUSTOMER` | A partner organisation being invoiced, Business Donors, Refurb Partners, or Request Partners |
-
-> **Users** are internal staff who log in and use the app.
-> **Customers** are the external partner organisations you manage and invoice.
-
----
-
 ## Role and Permission Reference
-
-| Role | Who they are | What they can do |
-|---|---|---|
-| `ROLE_USER` | Program Assistant | View staff accounts and partner organisations |
-| `ROLE_MANAGER` | Program Coordinator | View and update staff accounts and partner organisations |
-| `ROLE_ADMIN` | Program Admin | Full access except delete |
-| `ROLE_SYSADMIN` | Platform Owner | Full access including delete |
 
 Full permission set per role:
 
@@ -34,7 +13,7 @@ Full permission set per role:
 | `ROLE_ADMIN` | `READ:USER` `READ:CUSTOMER` `CREATE:USER` `CREATE:CUSTOMER` `UPDATE:USER` `UPDATE:CUSTOMER` |
 | `ROLE_SYSADMIN` | `READ:USER` `READ:CUSTOMER` `CREATE:USER` `CREATE:CUSTOMER` `UPDATE:USER` `UPDATE:CUSTOMER` `DELETE:USER` `DELETE:CUSTOMER` |
 
----
+<!-- --- -->
 
 ## Partner Invoice Services Detail
 
@@ -47,7 +26,7 @@ Full permission set per role:
 | **Request Partner** | Annual contribution: eligibility assessment and registration | $100 |
 | **Request Partner** | Annual contribution: device request processing | $75 |
 
----
+<!-- --- -->
 
 ## Business Requirements (Source of Truth)
 
@@ -75,7 +54,7 @@ Features derived from a mock business requirements document, written to demonstr
 - Download invoices as PDF
 - Export invoices to spreadsheet
 
----
+<!-- --- -->
 
 ## User Scenarios (Planning Notes)
 
@@ -87,7 +66,7 @@ Features derived from a mock business requirements document, written to demonstr
 
 > As a standard user, I can view assigned customers and invoices based on my role permissions.
 
----
+<!-- --- -->
 
 ## Angular Setup Reference
 
@@ -122,7 +101,7 @@ Docs: https://getbootstrap.com/docs/5.0/getting-started/introduction/
 
 Handling request failure: https://angular.dev/guide/http/making-requests#handling-request-failure
 
----
+<!-- --- -->
 
 ## Authentication Notes
 
@@ -167,11 +146,26 @@ Use cases:
 - Handle refresh entirely in the interceptor
 - Backend controls real security
 
+## Login Flow
+
+```
+User submits credentials
+  └── Backend validates email + password
+      └── If MFA enabled: Twilio sends SMS code
+          └── User submits SMS code
+              └── Backend issues Access Token + Refresh Token
+                  └── Angular stores both in localStorage
+                      └── Token Interceptor attaches Access Token to every request
+                          └── On 401: Interceptor silently refreshes → retries original request
+```
+
+On the backend, Spring Security routes login through `UsernamePasswordAuthenticationFilter` → `DaoAuthenticationProvider` → `UserDetailsService`. A custom `CustomAuthorizationFilter` validates the JWT on every protected request.
+
 ### Route Guards
 
 https://angular.dev/guide/routing/route-guards#canactivate
 
----
+<!-- --- -->
 
 ## Libraries
 
@@ -181,7 +175,7 @@ https://angular.dev/guide/routing/route-guards#canactivate
 | `bootstrap` | Bootstrap 5 CSS | `npm i bootstrap` |
 
 
----
+<!-- --- -->
 
 ## Useful Links
 
