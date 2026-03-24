@@ -154,11 +154,17 @@ tiffany@gmail.com /  123456
 
 **Backend**
 - Requires IntelliJ with environment variables set (see backend repo README)
-- MySQL runs in Docker:
+- MySQL runs in Docker
 
-```bash
-docker run --name techbridge-mysql -e MYSQL_ROOT_PASSWORD=<password> \
-  -e MYSQL_DATABASE=techbridge -p 3306:3306 -d mysql:8.0
+
+Create a container named mysql-techbridge, set the root password to MYSQL_ROOT_PASSWORD, create a database with this name on first start, map the machine port 3306 → container's port 3306, run in background, and use this image (pulls from Docker Hub if not downloaded yet):
+```
+docker run --name mysql-techbridge -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} -e MYSQL_DATABASE=dev_db_techbridge_invoice -p 3306:3306 -d mysql:8.0
+```
+
+Start the existing container:
+```
+docker start mysql-techbridge
 ```
 
 **Frontend**
