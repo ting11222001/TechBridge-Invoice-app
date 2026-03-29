@@ -27,7 +27,7 @@ TechBridge connects businesses donating old devices to schools and NGOs who need
 
 <!-- --- -->
 
-## The TechBridge Story
+## Why TechBridge needs an invoice module
 
 TechBridge is a non-profit that coordinates device donations from businesses to students in need. It connects three types of partner organisations, each with a financial relationship with TechBridge that needs to be tracked:
 
