@@ -2,6 +2,8 @@
 
 TechBridge is a device donation platform connecting businesses, refurbishers, and schools. This repo is the Invoice module. It lets program staff manage partner organisations, issue invoices, and track payments. Built with Angular, Spring Boot, and JWT auth, with role-based access across four staff levels.
 
+![Frontend CI](https://github.com/ting11222001/TechBridge-Invoice-app/actions/workflows/frontend-ci.yml/badge.svg)
+
 [About the TechBridge project](https://your-landing-page-url) · [Invoice Module Live Demo](https://tech-bridge-invoice-app.vercel.app/) · [Invoice Module (Backend repo)](https://github.com/ting11222001/TechBridge-Invoice) · Donation Module (coming soon)
 
 <!-- --- -->
