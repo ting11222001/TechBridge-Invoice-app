@@ -208,11 +208,11 @@ See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for full Railway + Vercel setup and
 | Done | Planned |
 |---|---|
 | GitHub Actions CI/CD pipeline | Sortable table columns + form validation |
-| | Stats charts on dashboard |
+| Full Vercel + Railway deployment docs with DB seeding | Stats charts on dashboard |
 | | Reactive Forms (replace `ngForm`) |
 | | Refactor components to Angular Signals |
 | | Cloudinary avatar upload + real mock data seeding |
 | | Remove Twilio SMS dependency (simplify demo auth) |
-| | Full Vercel + Railway deployment docs with DB seeding |
+| | Database seeding scripts |
 | | Database indexing for query performance |
 | | Explore gRPC or jOOQ on the backend |
