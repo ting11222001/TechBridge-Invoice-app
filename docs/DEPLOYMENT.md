@@ -11,6 +11,7 @@ Setup notes for Railway (backend + DB) and Vercel (frontend).
 | Frontend | Vercel | Auto-deploy from `main` |
 | Backend | Railway | Manual or GitHub integration |
 | Database | Railway (MySQL managed) | Provisioned in Railway dashboard |
+| CI | GitHub Actions | Runs tests + build on every push to `main` |
 
 <!-- --- -->
 

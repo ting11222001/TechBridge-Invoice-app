@@ -16,8 +16,8 @@ TechBridge is a device donation platform connecting businesses, refurbishers, an
 
 ## Table of Contents
 
-- [The TechBridge Story](#the-techbridge-story)
-- [Roles](#roles)
+- [Why TechBridge needs an invoice module](#why-techbridge-needs-an-invoice-module)
+- [Users of this Invoice platform](#users-of-this-invoice-platform)
 - [Example Invoice Services](#example-invoice-services)
 - [What's Built](#whats-built)
 - [Tech Stack](#tech-stack)
@@ -64,7 +64,6 @@ Internal staff have four access levels: Program Assistant (view only) → Progra
 | `ROLE_ADMIN` | Program Admin | Full access except delete |
 | `ROLE_SYSADMIN` | Platform Owner | Full access including delete |
 
-
 <!-- --- -->
 
 ## Example Invoice Services
@@ -95,6 +94,7 @@ Internal staff have four access levels: Program Assistant (view only) → Progra
 | Invoice list with pagination | Excel export |
 | Create new invoices | |
 | Download invoice as PDF | |
+| GitHub Actions CI (tests + build on every push) | |
 
 <!-- --- -->
 
@@ -106,14 +106,13 @@ Internal staff have four access levels: Program Assistant (view only) → Progra
 | Backend | Spring Boot 4.0.2 (Java 17), Spring Security, Lombok |
 | Auth | JWT (auth0 java-jwt), Twilio MFA/SMS |
 | Database | MySQL 8.0 |
-| Deploy | Vercel (frontend), Railway (backend + DB) |
+| Deploy | Vercel (frontend), Railway (backend + DB), GitHub Actions CI |
 
 <!-- --- -->
 
 ## Architecture
 
 **Frontend**
-
 ```
 Browser
   └── Angular Components
@@ -123,7 +122,6 @@ Browser
 ```
 
 **Backend**
-
 ```
 HTTP Request
   └── Spring Security Filters (JWT validation, permission check)
@@ -134,10 +132,10 @@ HTTP Request
 ```
 
 **Infrastructure**
-
 ```
 Local:       Docker → MySQL Container
 Production:  Vercel (Frontend) + Railway (Backend + MySQL)
+CI:          GitHub Actions → runs tests + production build on every push to main
 ```
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for deeper system design notes.
@@ -173,15 +171,18 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for deeper system design notes.
 - `environment.apiUrl` - one change switches between dev and prod
 - Guards applied once at the shell level, not duplicated per route
 
+**CI/CD**
+- GitHub Actions runs tests and production build on every push to `main`
+- Vercel and Railway auto-deploy from `main` — broken builds never reach production
+
 <!-- --- -->
 
 ## Getting Started
 
-**Prerequisites:** Node.js 20+, Angular CLI 21
-
+**Prerequisites:** Node.js 24, Angular CLI 21
 ```bash
-git clone https://github.com/your-username/techbridge-invoice-frontend
-cd techbridge-invoice-frontend
+git clone https://github.com/ting11222001/TechBridge-Invoice-app
+cd TechBridge-Invoice-app
 npm install
 ng serve
 ```
@@ -189,13 +190,6 @@ ng serve
 Opens at `http://localhost:4200`. Point `src/environments/environment.ts` at a local or deployed backend.
 
 > Backend setup (IntelliJ env vars, Docker DB config) is in the [backend repo](https://github.com/ting11222001/TechBridge-Invoice).
-
-**Demo credentials** (MFA disabled):
-
-```
-admin@gmail.com   /  Demo@2026
-tiffany@gmail.com /  123456
-```
 
 See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for full Railway + Vercel setup and DB seeding.
 
@@ -213,13 +207,12 @@ See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for full Railway + Vercel setup and
 
 | Done | Planned |
 |---|---|
-| | Sortable table columns + form validation |
+| GitHub Actions CI/CD pipeline | Sortable table columns + form validation |
 | | Stats charts on dashboard |
 | | Reactive Forms (replace `ngForm`) |
 | | Refactor components to Angular Signals |
 | | Cloudinary avatar upload + real mock data seeding |
 | | Remove Twilio SMS dependency (simplify demo auth) |
-| | GitHub Actions CI/CD pipeline |
 | | Full Vercel + Railway deployment docs with DB seeding |
 | | Database indexing for query performance |
 | | Explore gRPC or jOOQ on the backend |
